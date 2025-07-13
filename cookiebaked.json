@@ -1,0 +1,19 @@
+{
+    "__class_name": "Djangowillpower",
+    "_checkout": null,
+    "_cookiecutter_sveetch_python_version": "0.5.0",
+    "_output_dir": "/home/emencia/Apps",
+    "_repo_dir": "/home/emencia/Cookies/pythonapp",
+    "_template": "/home/emencia/Cookies/pythonapp",
+    "app_name": "django_willpower",
+    "author_email": "sveetch@gmail.com",
+    "author_name": "David Thenon",
+    "author_username": "sveetch",
+    "include_cli": true,
+    "init_git_repository": true,
+    "package_name": "django-willpower",
+    "project_name": "Django Willpower",
+    "project_short_description": "A Django application builder",
+    "pypi_username": "sveetch",
+    "version": "0.1.0"
+}
