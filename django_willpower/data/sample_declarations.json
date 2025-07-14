@@ -1,0 +1,83 @@
+{
+    "Blog": {
+        "fields": {
+            "title": {
+                "kind": "charfield",
+                "display_in_admin_list": true,
+                "required": true
+            },
+            "slug": {
+                "kind": "slugfield",
+                "required": true
+            },
+            "created": {
+                "kind": "datetimefield_auto_creation"
+            },
+            "description": {
+                "kind": "textfield"
+            },
+            "cover": {
+                "kind": "imagefield"
+            }
+        }
+    },
+    "Article": {
+        "fields": {
+            "title": {
+                "kind": "charfield",
+                "display_in_admin_list": true,
+                "required": true
+            },
+            "slug": {
+                "kind": "slugfield",
+                "required": true
+            },
+            "created": {
+                "kind": "datetimefield_auto_creation"
+            },
+            "modified": {
+                "kind": "datetimefield_auto_modification"
+            },
+            "content": {
+                "kind": "textfield"
+            },
+            "attachment": {
+                "kind": "filefield"
+            },
+            "cover": {
+                "kind": "imagefield"
+            },
+            "rgpd": {
+                "kind": "booleanfield",
+                "required": true
+            }
+        }
+    },
+    "Comment": {
+        "fields": {
+            "title": {
+                "kind": "charfield",
+                "display_in_admin_list": true,
+                "required": true
+            },
+            "created": {
+                "kind": "datetimefield_auto_creation"
+            },
+            "modified": {
+                "kind": "datetimefield_auto_modification"
+            },
+            "email": {
+                "kind": "emailfield",
+                "required": true
+            },
+            "comment": {
+                "kind": "textfield",
+                "required": true
+            },
+            "rgpd": {
+                "kind": "booleanfield",
+                "required": true
+            }
+        }
+    }
+}

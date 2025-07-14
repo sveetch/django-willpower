@@ -1,0 +1,42 @@
+{
+    "project_name": "Project name",
+    "project_short_description": "A Django application package.",
+
+    "include_api": true,
+    "include_cmsplugin": true,
+    "include_frontend": true,
+    "init_git_repository": true,
+
+    "author_name": "Your name",
+    "author_email": "Your email",
+    "author_username": "dummy",
+    "pypi_username": "{{ cookiecutter.author_username }}",
+
+    "package_name": "{{ cookiecutter.project_name.lower() | replace(' ', '-') | slugify }}",
+    "app_name": "{{ cookiecutter.project_name.lower() | replace(' ', '_') | slugify | replace('-', '_') }}",
+    "__class_name": "{{ cookiecutter.package_name | replace(' ', '') | slugify | replace('-', '') | title }}",
+
+    "version": "0.1.0",
+
+    "_willpower_version": "0.1.0-pre.1",
+
+    "__prompts__": {
+        "project_name": "Input your full project name:",
+        "project_short_description": "Give a short description for this project:",
+
+        "include_api": "Do you need an API with DjangoREST framework?",
+        "include_cmsplugin": "Do you need a basic DjangoCMS plugin?",
+        "include_frontend": "Do you need a basic frontend with Bootstrap?",
+        "init_git_repository": "Do you want to init a GIT repository with an initial commit?",
+
+        "author_name": "Author full name:",
+        "author_email": "Author email:",
+        "author_username": "Author username on Github:",
+        "pypi_username": "Author username on PyPi:",
+
+        "package_name": "Customize your package name if needed:",
+        "app_name": "Customize your application module name if needed:",
+
+        "version": "Package will starts in version:"
+    }
+}

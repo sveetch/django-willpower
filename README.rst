@@ -1,16 +1,86 @@
 .. _Python: https://www.python.org/
 .. _Click: https://click.palletsprojects.com
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
 
 ================
 Django Willpower
 ================
 
-A Django application builder
+Draft
+*****
+
+An attempt to reboot sveetch-djangoapp-sample to implement building detailled app where
+the multiple models and their fields can be declared and BAM the magic make a detailled
+app opposed to sveetch-djangoapp-sample that builded the same Blog/Article app.
+
+Cookiecutter is not able to produce a detailled structure, the module file needs to
+exists in template so we could not declare models like Profile and Stats to create their
+own modules, it will always be a Article/Blog thing.
+
+But Cookiecutter may still be used to scaffold the app structure but then an additional
+tool will build model, forms, factories, DRF serializers, forms, admins, tests, etc.. in
+detail from the declaration.
+
+The built application will be mostly CRUD, basic and very standardized. It probably
+won't never fit to all Django possibilities since this would need a better builder,
+currently we use Jinja templates to avoid build Python code programatically.
+
+.. WARNING::
+    This is a proof of concept.
+
+.. NOTE::
+
+    * Currently we are working with ``make bar`` to start development;
+    * We use a cookiecutter replay to not have to fill any prompt question;
+    * To quickly start we will ignore API, CMS plugin and all extras;
+
+- [x] Try to build model from declaration fields, for now we may start in the same
+  unique module to quickly see how it would be feasible, we could also doing the same
+  for views or forms;
+- [x] Find how to create on the fly module for each model inside the generated app
+  from cookiecutter;
+- [x] Finally this will be a package on its own, not a simple cookiecutter template
+  because builder needs more information and flexibility to create modules on the
+  fly. Cookiecutter is still used to build the app structure and everything else. But
+  we now need some tests to help growing and have a stable tool, and stop to have all
+  the builder code in a single file (that is necessary for cookiecutter hooks);
+
+- [ ] Base component building:
+
+  - [ ] Model;
+  - [ ] Form;
+  - [ ] Admin;
+  - [ ] View;
+  - [ ] URL;
+  - [ ] Settings;
+  - [ ] Model;
+
+- [ ] Model fields (in their component specificities):
+- [ ] Extra component building:
+
+  - [ ] Haystack index;
+  - [ ] DRF serializer;
+  - [ ] DRF viewset;
+  - [ ] CMS plugin;
+  - [ ] django-configuration helper;
+
+- [ ] A real process logs;
+
+  - [x] Implement in commandline;
+  - [ ] Update builder code to use logs instead of print;
+
+- [ ] Command is missing option '--version';
+- [ ] Command option validation is currently very basic, in beta stage it would need to
+  validate the structure of JSON payloads for required items;
+- [ ] YAML for declaration could be nice ?
+- [ ] We will have to introspect declarations to check for some things, actually nothing
+  is checked and it will probably lead to some invalid code when user makes a mistakes;
 
 Dependencies
 ************
 
-* `Python`_>=3.8;
+* `Cookiecutter`_>=2.4.0;
+* `Python`_>=3.10;
 * `Click`_>=8.0;
 
 Links

@@ -3,7 +3,7 @@ Specific application exceptions.
 """
 
 
-class DjangowillpowerBaseException(Exception):
+class {{ cookiecutter.__class_name }}BaseException(Exception):
     """
     Exception base.
 
@@ -13,15 +13,8 @@ class DjangowillpowerBaseException(Exception):
     pass
 
 
-class AppOperationError(DjangowillpowerBaseException):
+class AppOperationError({{ cookiecutter.__class_name }}BaseException):
     """
     Sample exception to raise from your code.
-    """
-    pass
-
-
-class ModuleBuilderError(DjangowillpowerBaseException):
-    """
-    Exception to raise from module builder.
     """
     pass
