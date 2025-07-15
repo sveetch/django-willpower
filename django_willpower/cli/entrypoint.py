@@ -139,11 +139,18 @@ def cli_frontend(basedir, declarations, config, no_structure, cookie_replay, ver
     # Create project structure with cookiecutter if not disabled
     if not no_structure:
         logger.info("🏗️Creating base project structure")
-        projectdir = cookiecutter(
+        projectdir = Path(cookiecutter(
             str(willpower_basepath / "structure_template"),
             output_dir=str(basedir),
             replay=replay_payload,
-        )
+        ))
+
+        # Do not blindly assert that returned path is correct
+        if not projectdir.exists():
+            msg = "Something went wrong during creation on path: {}"
+            logger.critical(msg.format(projectdir))
+            raise click.Abort()
+
         logger.debug("🔧 Project created: {}".format(projectdir))
     # If cookiecutter is not involved to create project, the base directory must
     # already exists.

@@ -1,6 +1,7 @@
 .. _Python: https://www.python.org/
 .. _Click: https://click.palletsprojects.com
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _sveetch-djangoapp-sample: https://github.com/sveetch/cookiecutter-sveetch-python
 
 ================
 Django Willpower
@@ -9,13 +10,14 @@ Django Willpower
 Draft
 *****
 
-An attempt to reboot sveetch-djangoapp-sample to implement building detailled app where
-the multiple models and their fields can be declared and BAM the magic make a detailled
-app opposed to sveetch-djangoapp-sample that builded the same Blog/Article app.
+An attempt to reboot `sveetch-djangoapp-sample`_
+to implement building of a detailled app where the multiple models and their fields can
+be declared and **BAM** the magic makes a detailled app opposed to
+`sveetch-djangoapp-sample`_ that always build the same dummy Blog app.
 
 Cookiecutter is not able to produce a detailled structure, the module file needs to
 exists in template so we could not declare models like Profile and Stats to create their
-own modules, it will always be a Article/Blog thing.
+own modules, it will always be a Blog thing.
 
 But Cookiecutter may still be used to scaffold the app structure but then an additional
 tool will build model, forms, factories, DRF serializers, forms, admins, tests, etc.. in
@@ -44,10 +46,14 @@ currently we use Jinja templates to avoid build Python code programatically.
   fly. Cookiecutter is still used to build the app structure and everything else. But
   we now need some tests to help growing and have a stable tool, and stop to have all
   the builder code in a single file (that is necessary for cookiecutter hooks);
+- [x] A real process logs:
+
+  - [x] Implement in commandline;
+  - [x] Update builder code to use logs instead of print;
 
 - [ ] Base component building:
 
-  - [ ] Model;
+  - [~] Model;
   - [ ] Form;
   - [ ] Admin;
   - [ ] View;
@@ -64,11 +70,7 @@ currently we use Jinja templates to avoid build Python code programatically.
   - [ ] CMS plugin;
   - [ ] django-configuration helper;
 
-- [ ] A real process logs;
-
-  - [x] Implement in commandline;
-  - [ ] Update builder code to use logs instead of print;
-
+- [ ] Optional pluralize option in model declaration would be nice;
 - [ ] Command is missing option '--version';
 - [ ] Command option validation is currently very basic, in beta stage it would need to
   validate the structure of JSON payloads for required items;

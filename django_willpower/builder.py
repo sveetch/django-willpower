@@ -15,21 +15,36 @@ class AppBuilder:
     Build everything for the application.
 
     .. TODO::
-        sys.exit usage should be replaced with internal exception.
+        Principle is to build model modules for each component of an application.
+        * Only a single application can be managed;
+        * An application have many components (model, form, view, etc..);
+        * An application have many models;
+        * A model have many fields;
+        * Each component have a module for each application model;
+        * A field describes model field and form field but may also defines what to
+          test on model from a component, what to display in template, etc..
+
+        Structure ::
+
+            - Application
+              └── Component[*]
+                  └── Model module[*]
+                      └── Field[*]
+
     """
-    def __init__(self, logger, appmanifest, basedir, declarations,
-                 custom_template_dir=None):
+    def __init__(self, logger, appmanifest, projectdir, declarations,
+                 custom_template_dir=None, allowed_components=None):
         self.logger = logger
         self.appmanifest = appmanifest
         self.appname = self.appmanifest["app_name"]
-        self.appdir = basedir / self.appname
-        self.basedir = basedir
+        self.projectdir = projectdir
+        self.appdir = self.projectdir / self.appname
         self.declarations = declarations
         self.custom_template_dir = custom_template_dir
         self.willpower_basepath = Path(django_willpower.__file__).parent
         self.base_templates = self.willpower_basepath / "app_templates"
 
-        self.allowed_components = [
+        self.allowed_components = allowed_components or [
             "models",
             #"forms",
             #"views",
@@ -91,6 +106,11 @@ class AppBuilder:
         """
         Get all model inventory for declarations
 
+        .. Todo::
+            Model inventorying should be done in its own class because it would allow
+            better JSON structure validation and could be executed upstream and passed
+            to builder and cookiecutter also.
+
         Returns:
             list: A list of ``ModelInventory`` object for defined model declarations.
         """
@@ -106,8 +126,71 @@ class AppBuilder:
             for modelname, modelopts in self.declarations.items()
         ]
 
-    def build_component(self, name, inventories):
-        self.logger.debug("  └── Components:", name)
+    def safe_path_write(self, path, content):
+        """
+        Safely write content to path even if path parents does not exists yet (they will
+        be created on need).
+        """
+        # Ensure path is always inside the application
+        assert path.parent.relative_to(self.appdir) is not None
+
+        # Create path parents if needed
+        if not path.parent.exists():
+            msg = "          └── Create parents: {}".format(path.parent)
+            self.logger.debug(msg)
+            path.parent.mkdir(mode=0o755, parents=True)
+
+        # TODO: commented until checked
+        msg = "          └── Written to: {}".format(path)
+        self.logger.debug(msg)
+        path.write_text(content)
+
+        return path
+
+    def build_modules(self, component_name, component_path, inventories):
+        """
+        Build component modules.
+
+        TODO: Iterate through defined component modules. Majority of components only
+        have a single model module to create but some may have more.
+        """
+
+        for pattern in ["{}"]:
+            module_pattern = component_path / pattern
+            self.logger.debug("      └── Module pattern : {}".format(module_pattern))
+
+            component_template = "{}/module.py".format(component_name)
+            self.logger.debug("      └── Module template : {}".format(component_template))
+
+            for model_inventory in inventories:
+                module_destination = Path(
+                    str(module_pattern).format(model_inventory.module_filename)
+                )
+                msg = "          └── {}: {}".format(model_inventory.name, module_destination)
+                self.logger.debug(msg)
+
+                template = self.jinja_env.get_template(component_template)
+
+                rendered = template.render(
+                    component=component_name,
+                    model_inventory=model_inventory,
+                )
+
+                #print("<start>")
+                #print(rendered)
+                #print("<end>")
+                self.safe_path_write(module_destination, rendered)
+
+        # NOTE: This should be the final thing and built once
+        global_init = "__init__.py"
+
+        return
+
+    def create_component(self, name, inventories):
+        """
+        Create a component.
+        """
+        self.logger.debug("  └── Components:".format(name))
         component_path = self.appdir / name
 
         if not component_path.exists():
@@ -115,25 +198,31 @@ class AppBuilder:
             self.logger.warning("      └── {}".format(msg))
             return
 
-        init_module = component_path / "__init__.py"
-        self.logger.debug("      └── init_module: {}".format(init_module))
+        # TODO
+        built = self.build_modules(name, component_path, inventories)
 
-        component_template = "{}/module.py".format(name)
-        self.logger.debug("      └── component_template : {}".format(component_template))
+        #init_module = component_path / "__init__.py"
+        #self.logger.debug("      └── init_module: {}".format(init_module))
 
-        for model_inventory in inventories:
-            model_module_path = component_path / model_inventory.module_filename
-            self.logger.debug("      └── {}: {}".format(model_inventory.name, model_module_path))
-            template = self.jinja_env.get_template(component_template)
-            rendered = template.render(
-                component=name,
-                model_inventory=model_inventory,
-            )
-            print("<start>")
-            print(rendered)
-            print("<end>")
+        #component_template = "{}/module.py".format(name)
+        #self.logger.debug("      └── component_template : {}".format(component_template))
 
+        #for model_inventory in inventories:
+            ## DEPRECATED
+            #model_module_path = component_path / model_inventory.module_filename
+            #msg = "      └── {}: {}".format(model_inventory.name, model_module_path)
+            #self.logger.debug(msg)
 
+            #template = self.jinja_env.get_template(component_template)
+
+            #rendered = template.render(
+                #component=name,
+                #model_inventory=model_inventory,
+            #)
+
+            #print("<start>")
+            #print(rendered)
+            #print("<end>")
 
         return
 
@@ -161,13 +250,13 @@ class AppBuilder:
         """
         self.logger.debug("Processing")
 
-        appmanifest = self.basedir / "cookiebacked.json"
+        appmanifest = self.projectdir / "cookiebacked.json"
 
         self.logger.debug("- Model inventories")
         inventories = self.get_model_inventories()
         # print(json.dumps([asdict(v) for v in inventories], indent=4))
 
-        # Discover structure
+        # Build components modules
         self.logger.debug("- Components")
         for name in self.allowed_components:
-            self.build_component(name, inventories)
+            self.create_component(name, inventories)
