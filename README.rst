@@ -51,9 +51,10 @@ currently we use Jinja templates to avoid build Python code programatically.
   - [x] Implement in commandline;
   - [x] Update builder code to use logs instead of print;
 
+- [ ] Correctly manage model fields (actually they all rendered as dummy varchar);
 - [ ] Base component building:
 
-  - [~] Model;
+  - [x] Model;
   - [ ] Form;
   - [ ] Admin;
   - [ ] View;
@@ -70,6 +71,10 @@ currently we use Jinja templates to avoid build Python code programatically.
   - [ ] CMS plugin;
   - [ ] django-configuration helper;
 
+- [ ] We probably should use Pydantic to validate model dataclasses;
+- [ ] Flake can be helpful to quickly see failures in generated modules from templates;
+- [ ] Start test coverage to catch failures and improve development without to launch
+  various commands each time;
 - [ ] Optional pluralize option in model declaration would be nice;
 - [ ] Command is missing option '--version';
 - [ ] Command option validation is currently very basic, in beta stage it would need to

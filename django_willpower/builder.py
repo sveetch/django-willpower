@@ -7,7 +7,8 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFo
 
 import django_willpower
 from .exceptions import ModuleBuilderError
-from .models import FieldModel, ModelInventory
+from .models import Component, Module, FieldModel, ModelInventory
+from .available_components import DEFAULTS as DEFAULT_COMPONENTS
 
 
 class AppBuilder:
@@ -15,7 +16,9 @@ class AppBuilder:
     Build everything for the application.
 
     .. TODO::
+
         Principle is to build model modules for each component of an application.
+
         * Only a single application can be managed;
         * An application have many components (model, form, view, etc..);
         * An application have many models;
@@ -27,9 +30,9 @@ class AppBuilder:
         Structure ::
 
             - Application
-              └── Component[*]
-                  └── Model module[*]
-                      └── Field[*]
+              └── Component{1,n}
+                  └── Module{1,n}
+                      └── Field{1,n}
 
     """
     def __init__(self, logger, appmanifest, projectdir, declarations,
@@ -44,12 +47,8 @@ class AppBuilder:
         self.willpower_basepath = Path(django_willpower.__file__).parent
         self.base_templates = self.willpower_basepath / "app_templates"
 
-        self.allowed_components = allowed_components or [
-            "models",
-            #"forms",
-            #"views",
-            # "indexes",
-        ]
+        # Careful because this is mutable objects
+        self.allowed_components = allowed_components or DEFAULT_COMPONENTS
 
         self.jinja_env = self.get_jinja_environment()
 
@@ -77,21 +76,15 @@ class AppBuilder:
             autoescape=select_autoescape(),
         )
 
-        # Ensure expected templates exists from available templates directories
+        # Ensure expected templates from enabled modules exist from available templates
+        # directories
         missing_templates = []
-
         for component in self.allowed_components:
-            component_init = "{}/__init__.py".format(component)
-            component_module = "{}/module.py".format(component)
-            try:
-                env.get_template(component_init)
-            except TemplateNotFound:
-                missing_templates.append(component_init)
-
-            try:
-                env.get_template(component_module)
-            except TemplateNotFound:
-                missing_templates.append(component_module)
+            for mod in component.modules:
+                try:
+                    env.get_template(mod.template)
+                except TemplateNotFound:
+                    missing_templates.append(mod.template)
 
         if missing_templates:
             msg = "- Template is missing: {}"
@@ -106,7 +99,7 @@ class AppBuilder:
         """
         Get all model inventory for declarations
 
-        .. Todo::
+        .. TODO::
             Model inventorying should be done in its own class because it would allow
             better JSON structure validation and could be executed upstream and passed
             to builder and cookiecutter also.
@@ -132,6 +125,7 @@ class AppBuilder:
         be created on need).
         """
         # Ensure path is always inside the application
+        print("IS path '{}' relative to {}".format(path.parent, self.appdir))
         assert path.parent.relative_to(self.appdir) is not None
 
         # Create path parents if needed
@@ -140,95 +134,77 @@ class AppBuilder:
             self.logger.debug(msg)
             path.parent.mkdir(mode=0o755, parents=True)
 
-        # TODO: commented until checked
         msg = "          └── Written to: {}".format(path)
         self.logger.debug(msg)
         path.write_text(content)
 
         return path
 
-    def build_modules(self, component_name, component_path, inventories):
+    def build_module(self, component, module, inventories):
         """
-        Build component modules.
-
-        TODO: Iterate through defined component modules. Majority of components only
-        have a single model module to create but some may have more.
+        Build component module for a model declaration.
         """
+        module_pattern = (
+            self.appdir / Path(component.directory) / module.destination_pattern
+        )
+        self.logger.debug("      └── Module pattern : {}".format(module_pattern))
 
-        for pattern in ["{}"]:
-            module_pattern = component_path / pattern
-            self.logger.debug("      └── Module pattern : {}".format(module_pattern))
+        self.logger.debug("      └── Module template : {}".format(module.template))
 
-            component_template = "{}/module.py".format(component_name)
-            self.logger.debug("      └── Module template : {}".format(component_template))
+        if module.once:
+            # It would be built once with the full inventories in context
+            module_destination = Path(module_pattern)
+            msg = "          └── All models: {}".format(module_destination)
+            self.logger.debug(msg)
 
-            for model_inventory in inventories:
+            # Render module template with context and write it to the FS
+            template = self.jinja_env.get_template(module.template)
+            rendered = template.render(
+                component=component,
+                module=module,
+                inventories=inventories,
+            )
+            self.safe_path_write(module_destination, rendered)
+        else:
+            for inventory in inventories:
                 module_destination = Path(
-                    str(module_pattern).format(model_inventory.module_filename)
+                    str(module_pattern).format(modelname=inventory.module_filename)
                 )
-                msg = "          └── {}: {}".format(model_inventory.name, module_destination)
+                msg = "          └── {}: {}".format(inventory.name, module_destination)
                 self.logger.debug(msg)
 
-                template = self.jinja_env.get_template(component_template)
-
+                # Render module template with context and write it to the FS
+                template = self.jinja_env.get_template(module.template)
                 rendered = template.render(
-                    component=component_name,
-                    model_inventory=model_inventory,
+                    component=component,
+                    module=module,
+                    model_inventory=inventory,
                 )
-
-                #print("<start>")
-                #print(rendered)
-                #print("<end>")
                 self.safe_path_write(module_destination, rendered)
-
-        # NOTE: This should be the final thing and built once
-        global_init = "__init__.py"
 
         return
 
-    def create_component(self, name, inventories):
+    def create_component(self, component, inventories):
         """
         Create a component.
         """
-        self.logger.debug("  └── Components:".format(name))
-        component_path = self.appdir / name
+        self.logger.debug("  └── Components:".format(component.name))
+        component_path = self.appdir / component.directory
 
         if not component_path.exists():
             msg = "Component directory does not exist: {}".format(component_path)
             self.logger.warning("      └── {}".format(msg))
+            # TODO: create component directory on the fly if not exists
             return
 
-        # TODO
-        built = self.build_modules(name, component_path, inventories)
-
-        #init_module = component_path / "__init__.py"
-        #self.logger.debug("      └── init_module: {}".format(init_module))
-
-        #component_template = "{}/module.py".format(name)
-        #self.logger.debug("      └── component_template : {}".format(component_template))
-
-        #for model_inventory in inventories:
-            ## DEPRECATED
-            #model_module_path = component_path / model_inventory.module_filename
-            #msg = "      └── {}: {}".format(model_inventory.name, model_module_path)
-            #self.logger.debug(msg)
-
-            #template = self.jinja_env.get_template(component_template)
-
-            #rendered = template.render(
-                #component=name,
-                #model_inventory=model_inventory,
-            #)
-
-            #print("<start>")
-            #print(rendered)
-            #print("<end>")
+        for module in component.modules:
+            self.build_module(component, module, inventories)
 
         return
 
     def process(self):
         """
-        TODO
+        TODO: Ongoing
 
         A model declaration item: ::
 
@@ -258,5 +234,5 @@ class AppBuilder:
 
         # Build components modules
         self.logger.debug("- Components")
-        for name in self.allowed_components:
-            self.create_component(name, inventories)
+        for component in self.allowed_components:
+            self.create_component(component, inventories)

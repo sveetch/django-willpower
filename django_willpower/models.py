@@ -2,6 +2,51 @@ from dataclasses import dataclass, field, asdict
 
 
 @dataclass
+class Module:
+    """
+    Module type for a component.
+
+    Arguments:
+        name (string): Label name
+        code (string): Unique (amongst all component modules) code name (used
+            internally)
+        template (string): The template to render to build module
+        destination_pattern (string): A pattern to build the module name for each
+            model. It can contains a pattern item ``{modelname}`` that will be replaced
+            by the Model name from a declaration. If attribute ``once`` is true, there
+            should be not pattern item ``{modelname}`` because it is not expected to
+            be built for each model and so the pattern item won't be resolved and left
+            unchanged in final destination path.
+        once (bool): If true the module is to be built once for all models. Default
+            value is false so the module is build for each model.
+    """
+    name: str
+    code: str
+    template: str
+    destination_pattern: str
+    once: bool = False
+
+
+@dataclass
+class Component:
+    """
+    An application component.
+
+    Arguments:
+        name (string): Label name
+        code (string): Unique (amongst all components) code name (used internally)
+        directory (string): Directory name where to write modules. May be empty for
+            some specific component like search or urls that have only a single module
+            to write at application root but be careful to not overwrite other modules.
+        modules (list): List of Module objects.
+    """
+    name: str
+    code: str
+    directory: str
+    modules: list[Module] = field(default_factory=list)
+
+
+@dataclass
 class FieldModel:
     """
     A model field descriptor.
@@ -61,7 +106,7 @@ class ModelInventory:
              self.module_name = self.name.lower()
 
         if not self.module_filename and self.module_filename is not None:
-             self.module_filename = "{}.py".format(self.module_name)
+             self.module_filename = "{}".format(self.module_name)
 
         if not self.admin_name and self.admin_name is not None:
              self.admin_name = "{}Admin".format(self.name)
