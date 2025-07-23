@@ -73,7 +73,6 @@ class AppBuilder:
                     custom_templates=self.custom_template_dir
                 )
             ),
-            autoescape=select_autoescape(),
         )
 
         # Ensure expected templates from enabled modules exist from available templates
@@ -104,6 +103,12 @@ class AppBuilder:
             better JSON structure validation and could be executed upstream and passed
             to builder and cookiecutter also.
 
+        .. TODO::
+            Also the inventorying should compute some metadata from fields because not
+            all their options are meant to be defined on their field, there is some
+            (like db indexing, constraint, etc..) that may need to be used elsewhere
+            (like in the Meta class in Model).
+
         Returns:
             list: A list of ``ModelInventory`` object for defined model declarations.
         """
@@ -125,7 +130,6 @@ class AppBuilder:
         be created on need).
         """
         # Ensure path is always inside the application
-        print("IS path '{}' relative to {}".format(path.parent, self.appdir))
         assert path.parent.relative_to(self.appdir) is not None
 
         # Create path parents if needed
@@ -154,7 +158,7 @@ class AppBuilder:
         if module.once:
             # It would be built once with the full inventories in context
             module_destination = Path(module_pattern)
-            msg = "          └── All models: {}".format(module_destination)
+            msg = "          └── For all models: {}".format(module.template)
             self.logger.debug(msg)
 
             # Render module template with context and write it to the FS
@@ -166,6 +170,7 @@ class AppBuilder:
             )
             self.safe_path_write(module_destination, rendered)
         else:
+            self.logger.debug("      └── For models:")
             for inventory in inventories:
                 module_destination = Path(
                     str(module_pattern).format(modelname=inventory.module_filename)
@@ -192,10 +197,9 @@ class AppBuilder:
         component_path = self.appdir / component.directory
 
         if not component_path.exists():
-            msg = "Component directory does not exist: {}".format(component_path)
+            msg = "Creating missing directory: {}".format(component_path)
             self.logger.warning("      └── {}".format(msg))
-            # TODO: create component directory on the fly if not exists
-            return
+            component_path.mkdir(mode=0o755, parents=True)
 
         for module in component.modules:
             self.build_module(component, module, inventories)
@@ -204,7 +208,7 @@ class AppBuilder:
 
     def process(self):
         """
-        TODO: Ongoing
+        Create all application components with their modules.
 
         A model declaration item: ::
 
@@ -213,7 +217,8 @@ class AppBuilder:
                     "title": {
                         "kind": "charfield",
                         "display_in_admin_list": true,
-                        "required": true
+                        "required": true,
+                        [...]
                     },
                 }
             }

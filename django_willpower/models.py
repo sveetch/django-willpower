@@ -49,19 +49,31 @@ class Component:
 @dataclass
 class FieldModel:
     """
-    A model field descriptor.
+    Define model field options
 
     Arguments:
         name (string):
     """
     name: str
-    kind: str = "varchar"
+    kind: str = "CharField"
+    default: str = None
+    required: bool = False
+    nullable: bool = False
+    unique: bool = False
+    read_only: bool = False
+    related_to: str = None
     display_in_admin_change: bool = True
     display_in_admin_list: bool = False
-    read_only: bool = False
-    required: bool = False
-    related_to: str = None
-    default: str = None
+    auto_creation: bool = False
+    auto_update: bool = False
+    modelfield_template: str = ""
+
+    def __post_init__(self):
+        """
+        Initialize empty positionnal argument values.
+        """
+        if not self.modelfield_template:
+             self.modelfield_template = "models/fields/{}.py".format(self.kind)
 
 
 @dataclass
@@ -102,7 +114,7 @@ class ModelInventory:
 
         NOTE: Not all these args should be optional with null value.
         """
-        if not self.module_name and self.module_name is not None:
+        if not self.module_name:
              self.module_name = self.name.lower()
 
         if not self.module_filename and self.module_filename is not None:

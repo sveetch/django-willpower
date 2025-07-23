@@ -9,11 +9,11 @@ class {{ model_inventory.name }}(models.Model):
     {{ model_inventory.name }} model.
 
     Attributes:
-        title (models.CharField): Required unique title string.
-    """
-{% for item in model_inventory.modelfields %}{% include "models/_fields.py" %}
+{% for field in model_inventory.modelfields %}        {{ field.name }} ({{ field.kind }}):
 {% endfor %}
-
+    """
+{% for field in model_inventory.modelfields %}{% include field.modelfield_template %}
+{% endfor %}
     class Meta:
         verbose_name = _("{{ model_inventory.name }}")
         verbose_name_plural = _("{{ model_inventory.name }}s")

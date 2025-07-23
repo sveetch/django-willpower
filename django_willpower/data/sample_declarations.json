@@ -2,53 +2,58 @@
     "Blog": {
         "fields": {
             "title": {
-                "kind": "charfield",
+                "kind": "CharField",
                 "display_in_admin_list": true,
                 "required": true
             },
             "slug": {
-                "kind": "slugfield",
+                "kind": "SlugField",
+                "unique": true,
                 "required": true
             },
             "created": {
-                "kind": "datetimefield_auto_creation"
-            },
-            "description": {
-                "kind": "textfield"
+                "kind": "DateTimeField",
+                "auto_creation": true
             },
             "cover": {
-                "kind": "imagefield"
+                "kind": "ImageField"
+            },
+            "description": {
+                "kind": "TextField"
             }
         }
     },
     "Article": {
         "fields": {
             "title": {
-                "kind": "charfield",
+                "kind": "CharField",
                 "display_in_admin_list": true,
                 "required": true
             },
             "slug": {
-                "kind": "slugfield",
+                "kind": "SlugField",
+                "unique": true,
                 "required": true
             },
             "created": {
-                "kind": "datetimefield_auto_creation"
+                "kind": "DateTimeField",
+                "auto_creation": true
             },
             "modified": {
-                "kind": "datetimefield_auto_modification"
-            },
-            "content": {
-                "kind": "textfield"
+                "kind": "DateTimeField",
+                "auto_update": true
             },
             "attachment": {
-                "kind": "filefield"
+                "kind": "FileField"
             },
             "cover": {
-                "kind": "imagefield"
+                "kind": "ImageField"
             },
-            "rgpd": {
-                "kind": "booleanfield",
+            "content": {
+                "kind": "TextField"
+            },
+            "published": {
+                "kind": "BooleanField",
                 "required": true
             }
         }
@@ -56,27 +61,33 @@
     "Comment": {
         "fields": {
             "title": {
-                "kind": "charfield",
+                "kind": "CharField",
                 "display_in_admin_list": true,
-                "required": true
+                "required": true,
+                "default": "coucou"
             },
             "created": {
-                "kind": "datetimefield_auto_creation"
+                "kind": "DateTimeField",
+                "auto_creation": true
             },
             "modified": {
-                "kind": "datetimefield_auto_modification"
+                "kind": "DateTimeField",
+                "auto_update": true
             },
             "email": {
-                "kind": "emailfield",
+                "kind": "EmailField",
+                "default": null,
+                "nullable": true,
                 "required": true
             },
             "comment": {
-                "kind": "textfield",
+                "kind": "TextField",
                 "required": true
             },
             "rgpd": {
-                "kind": "booleanfield",
-                "required": true
+                "kind": "BooleanField",
+                "required": true,
+                "default": true
             }
         }
     }

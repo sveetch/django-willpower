@@ -3,6 +3,20 @@ from .models import Component, Module
 
 DEFAULTS = [
     Component(
+        name="R&D",
+        code="willpower_dev",
+        directory="willpowerdev",
+        modules=[
+            Module(
+                name="Jinja whitespace control sample",
+                code="jinja_whitespace",
+                template="jinja_whitespace.html",
+                destination_pattern="jinja_whitespace.html",
+                once=True,
+            ),
+        ]
+    ),
+    Component(
         name="Application model",
         code="appmodel",
         directory="models",
