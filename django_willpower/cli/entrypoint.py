@@ -114,7 +114,8 @@ def cli_frontend(basedir, declarations, config, no_structure, cookie_replay, ver
         printout=printout
     )
 
-    # Use sample declarations file if not given
+    # WARNING: Temporary use sample declarations file if not given, the default should
+    # be a better sample
     declarations = (
         declarations
         if declarations
