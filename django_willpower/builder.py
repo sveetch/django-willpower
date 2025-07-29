@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFo
 
 import django_willpower
 from .exceptions import ModuleBuilderError
-from .models import Component, Module, FieldModel, ModelInventory
+from .datamodels import Component, Module, FieldModel, ModelInventory
 from .available_components import DEFAULTS as DEFAULT_COMPONENTS
 
 
@@ -116,6 +116,7 @@ class AppBuilder:
             ModelInventory(
                 app=self.appname,
                 name=modelname,
+                default_order=modelopts.get("default_order", []),
                 modelfields=[
                     FieldModel(name=k, **v)
                     for k, v in modelopts["fields"].items()
@@ -134,11 +135,11 @@ class AppBuilder:
 
         # Create path parents if needed
         if not path.parent.exists():
-            msg = "          └── Create parents: {}".format(path.parent)
+            msg = "          └── Created path parents: {}".format(path.parent)
             self.logger.debug(msg)
             path.parent.mkdir(mode=0o755, parents=True)
 
-        msg = "          └── Written to: {}".format(path)
+        msg = "              Written to: {}".format(path)
         self.logger.debug(msg)
         path.write_text(content)
 

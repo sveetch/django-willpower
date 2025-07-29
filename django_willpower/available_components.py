@@ -1,4 +1,4 @@
-from .models import Component, Module
+from .datamodels import Component, Module
 
 
 DEFAULTS = [
@@ -36,8 +36,13 @@ DEFAULTS = [
             ),
         ]
     ),
-    # Component(name="Application forms", code="appforms", directory="forms", modules=[]),
+    # Component(name="Application admins", code="appadmins", directory="admin", modules=[]),
     # Component(name="Application views", code="appviews", directory="views", modules=[]),
     # Component(name="Application urls", code="appurls", directory="", modules=[]),
+    # Component(name="Application forms", code="appforms", directory="forms", modules=[]),
+]
+
+
+EXTRA_SEARCH = [
     # Component(name="Application search indexes", code="appsearch", directory="", modules=[]),
 ]

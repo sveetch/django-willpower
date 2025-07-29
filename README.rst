@@ -51,30 +51,45 @@ currently we use Jinja templates to avoid build Python code programatically.
   - [x] Implement in commandline;
   - [x] Update builder code to use logs instead of print;
 
-- [ ] Correctly manage model fields (actually they all rendered as dummy varchar);
-- [ ] Base component building:
+- [~] Base component building:
 
   - [x] Model;
-  - [ ] Form;
   - [ ] Admin;
-  - [ ] View;
   - [ ] URL;
+  - [ ] View;
+  - [ ] Form;
   - [ ] Settings;
-  - [ ] Model;
+  - [ ] Extra components:
 
-- [ ] Model fields (in their component specificities):
-- [ ] Extra component building:
+    - [ ] Haystack index;
+    - [ ] DRF serializer;
+    - [ ] DRF viewset;
+    - [ ] CMS plugin;
+    - [ ] django-configuration helper;
 
-  - [ ] Haystack index;
-  - [ ] DRF serializer;
-  - [ ] DRF viewset;
-  - [ ] CMS plugin;
-  - [ ] django-configuration helper;
+- [ ] We seriously start lacking of test coverage, especially about components modules
+  render;
+- [~] Look to build Python modules with 'ast' instead of Jinja templates because it is
+  more efficient for code quality (indentation, space and condition is painful to
+  manage well with Jinja, this could lead to problems to maintain or evolve templates);
+
+  - [x] Check 'ast' is usable to build code;
+  - [x] Start code prototyping with models;
+  - [~] Finish the Model prototyping;
+  - [ ] Continue with other models;
+  - [ ] Alternatively we could use ast prototyping only for some parts like model
+    fields and keep using Jinja as the base. The ast prototyping would be specialized
+    to some specific part and have a Jinja filter for it (like a
+    ``build_model_fields``) but the filter would still need an argument to manage
+    indentation from the built code;
+
+    - [ ] Dataclasses may include method to prototype some parts ?
+
+  - [ ] We could also change the build to be hybrid, each module could be built either
+    from a Jinja template or an ast prototyper;
 
 - [ ] We probably should use Pydantic to validate model dataclasses;
 - [ ] Flake can be helpful to quickly see failures in generated modules from templates;
-- [ ] Start test coverage to catch failures and improve development without to launch
-  various commands each time;
 - [ ] Optional pluralize option in model declaration would be nice;
 - [ ] Command is missing option '--version';
 - [ ] Command option validation is currently very basic, in beta stage it would need to

@@ -51,22 +51,35 @@ class FieldModel:
     """
     Define model field options
 
+    There are many arguments but not all have meaning for all modules, some modules
+    may use them or not.
+
+    .. Todo::
+        To be better we would need to make a dataclass for each field, this would be
+        more accurate but would make more work opposed to this generic solution.
+
     Arguments:
         name (string):
     """
     name: str
+    label: str = ""
     kind: str = "CharField"
-    default: str = None
+    default: str = None  # Type should be UNION or ANY to allow for None
     required: bool = False
     nullable: bool = False
     unique: bool = False
     read_only: bool = False
-    related_to: str = None
+    related_to: str = None  # Type should be UNION or ANY to allow for None
     display_in_admin_change: bool = True
     display_in_admin_list: bool = False
     auto_creation: bool = False
     auto_update: bool = False
     modelfield_template: str = ""
+    min_value: int = None  # Type should be UNION or ANY to allow for None
+    max_value: int = None  # Type should be UNION or ANY to allow for None
+    target: str = "" # Empty target for a relation should be an error
+    related_name: str = ""
+    on_delete: str = ""
 
     def __post_init__(self):
         """
@@ -74,6 +87,9 @@ class FieldModel:
         """
         if not self.modelfield_template:
              self.modelfield_template = "models/fields/{}.py".format(self.kind)
+
+        if not self.label:
+             self.label = self.name
 
 
 @dataclass
@@ -85,11 +101,14 @@ class ModelInventory:
         app (string): The model application module name.
         name (string): The model name. Commonly it should start with an uppercase
             alphabet character.
+        **kwargs: All non positionnal arguments are automatically built if empty.
     """
     # The application name this model belong to
     app: str
     # The model name
     name: str
+    # Default order to define in model and to apply in views
+    default_order: list[str] = field(default_factory=list)
     # The model fields
     modelfields: list[FieldModel] = field(default_factory=list)
     # Common name for the Python module of components
@@ -101,11 +120,6 @@ class ModelInventory:
     factory_name: str = ""
     form_name: str = ""
     view_basename: str = "" # Is a pattern of a pattern, it must include a '{{}}'
-    # Optional API stuff
-    serializer_name: str = ""
-    # Optional DjangoCMS stuff
-    cmsplugin_name: str = ""
-    cmsplugin_model_name: str = ""
 
     def __post_init__(self):
         """
@@ -131,15 +145,6 @@ class ModelInventory:
 
         if not self.form_name and self.form_name is not None:
              self.form_name = "{}Form".format(self.name)
-
-        if not self.serializer_name and self.serializer_name is not None:
-             self.serializer_name = "{}Serializer".format(self.name)
-
-        if not self.cmsplugin_name and self.cmsplugin_name is not None:
-             self.cmsplugin_name = "{}Plugin".format(self.name)
-
-        if not self.cmsplugin_model_name and self.cmsplugin_model_name is not None:
-             self.cmsplugin_model_name = "{}PluginModel".format(self.name)
 
         if not self.view_basename and self.view_basename is not None:
              self.view_basename = "{}{{}}View".format(self.name)

@@ -25,6 +25,16 @@
     },
     "Article": {
         "fields": {
+            "blogs": {
+                "kind": "ManyToManyField",
+                "display_in_admin_list": true,
+                "required": true,
+                "nullable": true,
+                "default": null,
+                "target": "star_biz.Blog",
+                "related_name": "article",
+                "on_delete": "models.CASCADE"
+            },
             "title": {
                 "kind": "CharField",
                 "display_in_admin_list": true,
@@ -59,7 +69,27 @@
         }
     },
     "Comment": {
+        "default_order": ["title"],
+        "details_url_pattern": ["title"],
         "fields": {
+            "article": {
+                "kind": "ForeignKey",
+                "display_in_admin_list": true,
+                "required": true,
+                "nullable": true,
+                "default": null,
+                "target": "star_biz.Article",
+                "related_name": "comment",
+                "on_delete": "models.CASCADE"
+            },
+            "blog": {
+                "kind": "ForeignKey",
+                "label": "related weblog",
+                "required": false,
+                "nullable": true,
+                "default": null,
+                "target": "star_biz.Blog"
+            },
             "title": {
                 "kind": "CharField",
                 "display_in_admin_list": true,
@@ -73,6 +103,13 @@
             "modified": {
                 "kind": "DateTimeField",
                 "auto_update": true
+            },
+            "published": {
+                "kind": "DateTimeField",
+                "nullable": true
+            },
+            "reported": {
+                "kind": "DateField"
             },
             "email": {
                 "kind": "EmailField",
@@ -88,6 +125,12 @@
                 "kind": "BooleanField",
                 "required": true,
                 "default": true
+            },
+            "counter": {
+                "kind": "IntegerField",
+                "default": 0,
+                "min_value": 2,
+                "max_value": 42
             }
         }
     }
