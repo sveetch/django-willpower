@@ -1,9 +1,13 @@
 {
     "Blog": {
+        "readonly_fields": ["created"],
+        "search_fields": ["title"],
+        "admin_list_display": ["title", "created"],
+        "prepopulated_fields": {"slug": ["title"]},
+        "list_filter": ["created"],
         "fields": {
             "title": {
                 "kind": "CharField",
-                "display_in_admin_list": true,
                 "required": true
             },
             "slug": {
@@ -27,7 +31,6 @@
         "fields": {
             "blogs": {
                 "kind": "ManyToManyField",
-                "display_in_admin_list": true,
                 "required": true,
                 "nullable": true,
                 "default": null,
@@ -37,7 +40,6 @@
             },
             "title": {
                 "kind": "CharField",
-                "display_in_admin_list": true,
                 "required": true
             },
             "slug": {
@@ -70,11 +72,10 @@
     },
     "Comment": {
         "default_order": ["title"],
-        "details_url_pattern": ["title"],
+        "provide_inline": true,
         "fields": {
             "article": {
                 "kind": "ForeignKey",
-                "display_in_admin_list": true,
                 "required": true,
                 "nullable": true,
                 "default": null,
@@ -92,7 +93,6 @@
             },
             "title": {
                 "kind": "CharField",
-                "display_in_admin_list": true,
                 "required": true,
                 "default": "coucou"
             },

@@ -47,7 +47,7 @@ class Component:
 
 
 @dataclass
-class FieldModel:
+class Field:
     """
     Define model field options
 
@@ -64,22 +64,24 @@ class FieldModel:
     name: str
     label: str = ""
     kind: str = "CharField"
+    modelfield_template: str = ""
     default: str = None  # Type should be UNION or ANY to allow for None
     required: bool = False
     nullable: bool = False
     unique: bool = False
-    read_only: bool = False
+    read_only: bool = False # Not implemented in field templates
     related_to: str = None  # Type should be UNION or ANY to allow for None
-    display_in_admin_change: bool = True
-    display_in_admin_list: bool = False
     auto_creation: bool = False
     auto_update: bool = False
-    modelfield_template: str = ""
     min_value: int = None  # Type should be UNION or ANY to allow for None
     max_value: int = None  # Type should be UNION or ANY to allow for None
     target: str = "" # Empty target for a relation should be an error
     related_name: str = ""
     on_delete: str = ""
+    # May be delegated elsewhere for a list of all displayed fields
+    admin_display_in_change: bool = True
+    # May be delegated elsewhere for a list of all displayed fields
+    admin_display_in_list: bool = False
 
     def __post_init__(self):
         """
@@ -93,7 +95,7 @@ class FieldModel:
 
 
 @dataclass
-class ModelInventory:
+class DataModel:
     """
     Model descriptor and its features for components.
 
@@ -107,10 +109,24 @@ class ModelInventory:
     app: str
     # The model name
     name: str
+    # List of model inline admin classes to include
+    admin_inline_models: list[str] = field(default_factory=list)
+    # Define if model should provide an inline admin "{model_name}AdminInline" (NOT IMPLEMENTED YET)
+    provide_inline: bool = False
     # Default order to define in model and to apply in views
     default_order: list[str] = field(default_factory=list)
+    # The fields where to performing search like for admin or generate haystack index
+    search_fields: list[str] = field(default_factory=list)
+    # List of read only field names
+    readonly_fields: list[str] = field(default_factory=list)
+    # List of field prepopulation
+    prepopulated_fields: dict = field(default_factory=dict)
+    # For the admin only
+    list_filter: list[str] = field(default_factory=list)
+    # Usually only for admin
+    admin_list_display: list[str] = field(default_factory=list)
     # The model fields
-    modelfields: list[FieldModel] = field(default_factory=list)
+    modelfields: list[Field] = field(default_factory=list)
     # Common name for the Python module of components
     module_name: str = ""
     module_filename: str = ""

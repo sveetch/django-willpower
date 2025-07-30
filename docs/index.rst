@@ -10,7 +10,8 @@ Contents
    :maxdepth: 2
 
    install.rst
-   cli.rst
+   overview.rst
+   draft.rst
    references/index.rst
 
 About the project

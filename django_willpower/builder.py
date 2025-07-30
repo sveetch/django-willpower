@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFo
 
 import django_willpower
 from .exceptions import ModuleBuilderError
-from .datamodels import Component, Module, FieldModel, ModelInventory
+from .datamodels import Component, Module, Field, DataModel
 from .available_components import DEFAULTS as DEFAULT_COMPONENTS
 
 
@@ -94,7 +94,7 @@ class AppBuilder:
 
         return env
 
-    def get_model_inventories(self):
+    def bind_datamodels(self):
         """
         Get all model inventory for declarations
 
@@ -110,20 +110,27 @@ class AppBuilder:
             (like in the Meta class in Model).
 
         Returns:
-            list: A list of ``ModelInventory`` object for defined model declarations.
+            list: A list of ``DataModel`` object for defined model declarations.
         """
-        return [
-            ModelInventory(
+        datamodels = []
+
+        for modelname, modelopts in self.declarations.items():
+            model = DataModel(
                 app=self.appname,
                 name=modelname,
-                default_order=modelopts.get("default_order", []),
                 modelfields=[
-                    FieldModel(name=k, **v)
-                    for k, v in modelopts["fields"].items()
-                ]
+                    Field(name=fieldname, **fieldopts)
+                    for fieldname, fieldopts in modelopts["fields"].items()
+                ],
+                **{
+                    k: v
+                    for k, v in modelopts.items()
+                    if k != "fields"
+                }
             )
-            for modelname, modelopts in self.declarations.items()
-        ]
+            datamodels.append(model)
+
+        return datamodels
 
     def safe_path_write(self, path, content):
         """
@@ -232,10 +239,8 @@ class AppBuilder:
         """
         self.logger.debug("Processing")
 
-        appmanifest = self.projectdir / "cookiebacked.json"
-
         self.logger.debug("- Model inventories")
-        inventories = self.get_model_inventories()
+        inventories = self.bind_datamodels()
         # print(json.dumps([asdict(v) for v in inventories], indent=4))
 
         # Build components modules

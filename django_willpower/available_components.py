@@ -36,7 +36,26 @@ DEFAULTS = [
             ),
         ]
     ),
-    # Component(name="Application admins", code="appadmins", directory="admin", modules=[]),
+    Component(
+        name="Application admins",
+        code="appadmins",
+        directory="admin",
+        modules=[
+            Module(
+                name="Admin module",
+                code="module",
+                template="admin/module.py",
+                destination_pattern="{modelname}.py",
+            ),
+            Module(
+                name="Admin init",
+                code="init",
+                template="admin/__init__.py",
+                destination_pattern="__init__.py",
+                once=True,
+            ),
+        ]
+    ),
     # Component(name="Application views", code="appviews", directory="views", modules=[]),
     # Component(name="Application urls", code="appurls", directory="", modules=[]),
     # Component(name="Application forms", code="appforms", directory="forms", modules=[]),
