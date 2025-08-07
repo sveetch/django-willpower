@@ -1,0 +1,18 @@
+{{ '{%' }} extends "{{ app }}/base.html" {{ '%}' }}
+{{ '{%' }} load i18n {{ '%}' }}
+
+{{ '{%' }} block head_title {{ '%}' }}{{ '{{' }} {{ model_inventory.module_name }}_object {{ '}}' }} - {{ '{{' }} block.super {{ '}}' }}{{ '{%' }} endblock head_title {{ '%}' }}
+
+{% raw %}{% block app_content %}{% spaceless %}{% endraw %}
+<div class="{{ model_inventory.module_name }}-detail">
+    <h1>{{ '{{' }} {{ model_inventory.module_name }}_object {{ '}}' }}</h1>
+
+    <table class="table table-striped">
+{% for field in model_inventory.modelfields %}        <tr class="{{ model_inventory.module_name }}-row">
+            <th class="col-lg-4">{{ field.label }} <br><small class="fw-normal">{{ field.kind }}</small></th>
+            <td class="col-lg-8">{{ '{%' }} if {{ model_inventory.module_name }}_object.{{ field.name }} {{ '%}' }}{{ '{{' }} {{ model_inventory.module_name }}_object.{{ field.name }} {{ '}}' }}{{ '{%' }} else {{ '%}' }}<em>{{ '{%' }} translate "Empty" {{ '%}' }}</em>{{ '{%' }} endif {{ '%}' }}</td>
+        </tr>{% endfor %}
+    </table>
+
+</div>
+{% raw %}{% endspaceless %}{% endblock app_content %}{% endraw %}

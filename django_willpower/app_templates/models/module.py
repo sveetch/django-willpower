@@ -36,3 +36,4 @@ class {{ model_inventory.name }}(models.Model):
 {% for field in model_inventory.modelfields %}{% if field.auto_update %}        self.{{ field.name }} = timezone.now()
 {% endif %}{% endfor %}
         super().save(*args, **kwargs)
+

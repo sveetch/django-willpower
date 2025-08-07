@@ -82,6 +82,10 @@ class Field:
     admin_display_in_change: bool = True
     # May be delegated elsewhere for a list of all displayed fields
     admin_display_in_list: bool = False
+    # Commentary just for developer, not used in templates
+    comment: str = ""
+    # A list of choices
+    choices_list: list[str] = field(default_factory=list)
 
     def __post_init__(self):
         """
@@ -107,8 +111,11 @@ class DataModel:
     """
     # The application name this model belong to
     app: str
-    # The model name
+    # The model class name
     name: str
+    # The verbose label in single and plural forms
+    verbose_single: str = ""
+    verbose_plural: str = ""
     # List of model inline admin classes to include
     admin_inline_models: list[str] = field(default_factory=list)
     # Define if model should provide an inline admin "{model_name}AdminInline" (NOT IMPLEMENTED YET)
@@ -127,8 +134,9 @@ class DataModel:
     admin_list_display: list[str] = field(default_factory=list)
     # The model fields
     modelfields: list[Field] = field(default_factory=list)
-    # Common name for the Python module of components
+    # Common name for a Python module or Python variable
     module_name: str = ""
+    module_name_plural: str = ""
     module_filename: str = ""
     # Components names, empty component name will be build from name if empty
     admin_name: str = ""
@@ -144,11 +152,20 @@ class DataModel:
 
         NOTE: Not all these args should be optional with null value.
         """
+        if not self.verbose_single:
+             self.verbose_single = self.name.lower()
+
+        if not self.verbose_plural:
+             self.verbose_plural = self.verbose_single + "s"
+
         if not self.module_name:
              self.module_name = self.name.lower()
 
+        if not self.module_name_plural:
+             self.module_name_plural = self.module_name + "s"
+
         if not self.module_filename and self.module_filename is not None:
-             self.module_filename = "{}".format(self.module_name)
+             self.module_filename = self.module_name
 
         if not self.admin_name and self.admin_name is not None:
              self.admin_name = "{}Admin".format(self.name)

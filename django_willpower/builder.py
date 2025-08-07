@@ -7,7 +7,7 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFo
 
 import django_willpower
 from .exceptions import ModuleBuilderError
-from .datamodels import Component, Module, Field, DataModel
+from .datamodels import Field, DataModel
 from .available_components import DEFAULTS as DEFAULT_COMPONENTS
 
 
@@ -118,6 +118,7 @@ class AppBuilder:
             model = DataModel(
                 app=self.appname,
                 name=modelname,
+                verbose_single=modelopts.get("label", modelname),
                 modelfields=[
                     Field(name=fieldname, **fieldopts)
                     for fieldname, fieldopts in modelopts["fields"].items()
@@ -165,13 +166,16 @@ class AppBuilder:
 
         if module.once:
             # It would be built once with the full inventories in context
-            module_destination = Path(module_pattern)
+            module_destination = Path(
+                str(module_pattern).format(appname=self.appname)
+            )
             msg = "          └── For all models: {}".format(module.template)
             self.logger.debug(msg)
 
             # Render module template with context and write it to the FS
             template = self.jinja_env.get_template(module.template)
             rendered = template.render(
+                app=self.appname,
                 component=component,
                 module=module,
                 inventories=inventories,
@@ -181,7 +185,10 @@ class AppBuilder:
             self.logger.debug("      └── For models:")
             for inventory in inventories:
                 module_destination = Path(
-                    str(module_pattern).format(modelname=inventory.module_filename)
+                    str(module_pattern).format(
+                        appname=self.appname,
+                        modelname=inventory.module_filename
+                    )
                 )
                 msg = "          └── {}: {}".format(inventory.name, module_destination)
                 self.logger.debug(msg)
@@ -189,6 +196,7 @@ class AppBuilder:
                 # Render module template with context and write it to the FS
                 template = self.jinja_env.get_template(module.template)
                 rendered = template.render(
+                    app=self.appname,
                     component=component,
                     module=module,
                     model_inventory=inventory,

@@ -56,8 +56,72 @@ DEFAULTS = [
             ),
         ]
     ),
-    # Component(name="Application views", code="appviews", directory="views", modules=[]),
-    # Component(name="Application urls", code="appurls", directory="", modules=[]),
+    Component(
+        name="Application URLs",
+        code="appurls",
+        directory="urls",
+        modules=[
+            Module(
+                name="URLs module",
+                code="module",
+                template="urls/module.py",
+                destination_pattern="{modelname}.py",
+            ),
+            Module(
+                name="URLs init",
+                code="init",
+                template="urls/__init__.py",
+                destination_pattern="__init__.py",
+                once=True,
+            ),
+        ]
+    ),
+    Component(
+        name="Application views",
+        code="appviews",
+        directory="views",
+        modules=[
+            Module(
+                name="Views module",
+                code="module",
+                template="views/module.py",
+                destination_pattern="{modelname}.py",
+            ),
+            Module(
+                name="Views init",
+                code="init",
+                template="views/__init__.py",
+                destination_pattern="__init__.py",
+                once=True,
+            ),
+        ]
+    ),
+    Component(
+        name="Application templates",
+        code="apptemplates",
+        directory="templates",
+        modules=[
+            Module(
+                name="Index template",
+                code="index",
+                template="templates/model_index.html",
+                destination_pattern="{appname}/{modelname}/index.html",
+            ),
+            Module(
+                name="Detail template",
+                code="detail",
+                template="templates/model_detail.html",
+                destination_pattern="{appname}/{modelname}/detail.html",
+            ),
+            Module(
+                name="Menu template",
+                code="detail",
+                template="templates/menu.html",
+                destination_pattern="{appname}/menu.html",
+                once=True,
+            ),
+        ]
+    ),
     # Component(name="Application forms", code="appforms", directory="forms", modules=[]),
 ]
 

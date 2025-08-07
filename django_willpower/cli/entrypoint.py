@@ -86,7 +86,7 @@ APP_LOGGER_CONF = ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL", None)
 )
 def cli_frontend(basedir, declarations, config, no_structure, cookie_replay, verbose):
     """
-    Django willpower command to build an application structure from models declarations.
+    Willpower command to build an application structure from models declarations.
 
     'basedir' argument is the base directory path where it will create the project
     directory with its application structure and modules. It means for a given base

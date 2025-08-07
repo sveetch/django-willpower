@@ -15,3 +15,4 @@ class {{ model_inventory.admin_name }}(admin.ModelAdmin):
     search_fields = ["{{ model_inventory.search_fields|join('", "') }}"]{% endif %}{% if model_inventory.admin_inline_models %}
     inlines = [{{ model_inventory.admin_inline_models|join(', ') }}]{% endif %}{% if model_inventory.prepopulated_fields %}
     prepopulated_fields = {{ model_inventory.prepopulated_fields|tojson }}{% endif %}
+

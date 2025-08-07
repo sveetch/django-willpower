@@ -74,13 +74,15 @@ Todo
   - [x] Implement in commandline;
   - [x] Update builder code to use logs instead of print;
 
-- [~] Base component building:
+- [~] Basic components:
 
   - [x] Models;
-  - [~] Admins;
-  - [ ] URLs;
-  - [ ] Views;
-  - [ ] Templates;
+  - [x] Admins;
+  - [x] URLs;
+  - [x] Views;
+  - [x] Templates;
+  - [ ] DAL view;
+  - [ ] Breadcrumbs;
   - [ ] Forms;
   - [ ] Settings;
   - [ ] Extra components:

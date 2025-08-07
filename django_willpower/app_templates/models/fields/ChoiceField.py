@@ -5,5 +5,6 @@
         {% if not field.max_value %}max_length=255,{% else %}max_length={{ field.max_value }},{% endif %}{% if field.unique %}
         unique=True,{% endif %}{% if field.required %}
         blank=False,{% endif %}{% if field.nullable %}
-        null=True,{% endif %}
+        null=True,{% endif %}{% if field.choice_list %}
+        choices={{ choice_list }},{% endif %}
     )
