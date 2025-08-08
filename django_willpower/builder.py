@@ -104,10 +104,9 @@ class AppBuilder:
             to builder and cookiecutter also.
 
         .. TODO::
-            Also the inventorying should compute some metadata from fields because not
-            all their options are meant to be defined on their field, there is some
-            (like db indexing, constraint, etc..) that may need to be used elsewhere
-            (like in the Meta class in Model).
+            * Field should know about its Model
+            * Module should know about its Component
+            * There may be a App datamodel, if so the Component should know about it
 
         Returns:
             list: A list of ``DataModel`` object for defined model declarations.
@@ -123,6 +122,8 @@ class AppBuilder:
                     Field(name=fieldname, **fieldopts)
                     for fieldname, fieldopts in modelopts["fields"].items()
                 ],
+                # All other model payload items are passed as keyword arguments however
+                # they must be defined as datamodel attribute before.
                 **{
                     k: v
                     for k, v in modelopts.items()

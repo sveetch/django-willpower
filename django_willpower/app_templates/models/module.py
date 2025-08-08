@@ -4,6 +4,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+{% for field in model_inventory.modelfields %}{% if field.choices_list %}
+from ..choices import get_{{ field.name }}_choices, get_{{ field.name }}_default{% endif %}{% endfor %}
+
 
 class {{ model_inventory.name }}(models.Model):
     """
@@ -19,9 +22,11 @@ class {{ model_inventory.name }}(models.Model):
         verbose_name_plural = _("{{ model_inventory.name }}s"){% if model_inventory.default_order %}
         ordering = [{% for fieldname in model_inventory.default_order %}"{{ fieldname }}",{% endfor %}]
 {% endif %}
-    {% if False %}
+    {% if model_inventory.string_representation %}
     def __str__(self):
-        return self.title
+        return {% if model_inventory.string_representation is string -%}
+            self.{{ model_inventory.string_representation }}{% else %}" ".join([{% for item in model_inventory.string_representation %}self.{{ item }}{% if not loop.last %}, {% endif %}{% endfor %}])
+        {%- endif %}
     {% endif %}
     def get_absolute_url(self):
         """

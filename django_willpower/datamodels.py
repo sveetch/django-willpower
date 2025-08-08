@@ -42,7 +42,7 @@ class Component:
     """
     name: str
     code: str
-    directory: str
+    directory: str = ""
     modules: list[Module] = field(default_factory=list)
 
 
@@ -116,6 +116,8 @@ class DataModel:
     # The verbose label in single and plural forms
     verbose_single: str = ""
     verbose_plural: str = ""
+    # List of Field objects to define model fields
+    modelfields: list[Field] = field(default_factory=list)
     # List of model inline admin classes to include
     admin_inline_models: list[str] = field(default_factory=list)
     # Define if model should provide an inline admin "{model_name}AdminInline" (NOT IMPLEMENTED YET)
@@ -132,18 +134,22 @@ class DataModel:
     list_filter: list[str] = field(default_factory=list)
     # Usually only for admin
     admin_list_display: list[str] = field(default_factory=list)
-    # The model fields
-    modelfields: list[Field] = field(default_factory=list)
     # Common name for a Python module or Python variable
     module_name: str = ""
     module_name_plural: str = ""
     module_filename: str = ""
-    # Components names, empty component name will be build from name if empty
+    # Components names, empty component name will be built from name if empty
     admin_name: str = ""
     admin_form_name: str = ""
     factory_name: str = ""
     form_name: str = ""
-    view_basename: str = "" # Is a pattern of a pattern, it must include a '{{}}'
+    # Is a pattern of a pattern, it must include a '{{}}' that will be replaced with
+    # the component name
+    view_basename: str = ""
+    # Model attribute to use as string representation ('__str__')
+    # Can be a string for a Model attribute to use or a list for model attributes to
+    # join with a whitespace
+    string_representation: str = ""
 
     def __post_init__(self):
         """

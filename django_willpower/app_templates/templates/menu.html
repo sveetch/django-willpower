@@ -1,7 +1,7 @@
 {{ '{%' }} load i18n {{ '%}' }}
 <ul>
 {% for model_inventory in inventories %}    <li{{ '{%' }} if current_model == '{{ model_inventory.name }}' {{ '%}' }} class="active"{{ '{%' }} endif {{ '%}' }}>
-        <a href="{{ '{%' }} url "{{ model_inventory.module_name }}-index" {{ '%}' }}">{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }}</a>
+        <a href="{{ '{%' }} url "{{ app }}:{{ model_inventory.module_name }}-index" {{ '%}' }}">{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }}</a>
     </li>
 {% endfor %}
 </ul>

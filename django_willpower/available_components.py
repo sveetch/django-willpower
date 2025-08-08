@@ -37,6 +37,20 @@ DEFAULTS = [
         ]
     ),
     Component(
+        name="Application choices",
+        code="appchoices",
+        # directory="models",
+        modules=[
+            Module(
+                name="Model choices",
+                code="choices",
+                template="choices.py",
+                destination_pattern="choices.py",
+                once=True,
+            ),
+        ]
+    ),
+    Component(
         name="Application admins",
         code="appadmins",
         directory="admin",
