@@ -83,12 +83,12 @@ Todo
   - [x] Templates;
   - [x] Choices;
   - [ ] DAL view;
-  - [ ] Breadcrumbs;
   - [ ] Forms;
   - [ ] Settings;
   - [ ] Extra components:
 
     - [ ] Haystack index;
+    - [ ] Breadcrumbs?
     - [ ] DRF serializer;
     - [ ] DRF viewset;
     - [ ] CMS plugin;
