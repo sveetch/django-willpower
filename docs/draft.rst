@@ -81,6 +81,7 @@ Todo
   - [x] URLs;
   - [x] Views;
   - [x] Templates;
+  - [x] Choices;
   - [ ] DAL view;
   - [ ] Breadcrumbs;
   - [ ] Forms;
