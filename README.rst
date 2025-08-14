@@ -1,17 +1,20 @@
 .. _Python: https://www.python.org/
 .. _Click: https://click.palletsprojects.com
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _sveetch-djangoapp-sample: https://github.com/sveetch/cookiecutter-sveetch-python
 
-================
-Django Willpower
-================
+=========
+Willpower
+=========
 
-Willpower is an application builder with a low granularity on components opposed to
-other application builder with tools like `Cookiecutter`_.
+Willpower is a Python application builder with a high granularity on components opposed
+to other builder tools like `Cookiecutter`_.
 
-With Willpower you will be able to define many components from data model options then
-so every components will have a module for each model with well configured options.
+Willpower starts a new application project with a project template (using
+`Cookiecutter`_) and then build many components (models, admin, views, templates, etc..)
+for each defined model declaration.
+
+A model declaration defines the model fields and many options around for the components
+such as your model components may include their own options.
 
 Dependencies
 ************

@@ -74,6 +74,12 @@ Todo
   - [x] Implement in commandline;
   - [x] Update builder code to use logs instead of print;
 
+- [ ] There is some cleaning to do in the cookiecutter templates:
+
+  - [ ] Useless components that won't be used;
+  - [ ] Useless components that are generated and so overwritten from the app builder;
+  - [ ] Cookie options that stand on hooks (or we may restore hooks);
+
 - [~] Basic components:
 
   - [x] Models;
@@ -82,6 +88,7 @@ Todo
   - [x] Views;
   - [x] Templates;
   - [x] Choices;
+  - [ ] Factories;
   - [ ] DAL view;
   - [ ] Forms;
   - [ ] Settings;
@@ -94,6 +101,7 @@ Todo
     - [ ] CMS plugin;
     - [ ] django-configuration helper;
 
+- [ ] Rename 'django-willpower' to just 'willpower';
 - [ ] We seriously start lacking of test coverage, especially about components modules
   render;
 - [~] Look to build Python modules with 'ast' instead of Jinja templates because it is
@@ -115,7 +123,6 @@ Todo
   - [ ] We could also change the build to be hybrid, each module could be built either
     from a Jinja template or an ast prototyper;
 
-- [ ] Rename 'django-willpower' to just 'willpower';
 - [ ] We probably should use Pydantic to validate model dataclasses;
 - [ ] Flake can be helpful to quickly see failures in generated modules from templates;
 - [ ] Optional pluralize option in model declaration would be nice;

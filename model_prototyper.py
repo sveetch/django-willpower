@@ -169,6 +169,8 @@ class ModulePrototyperMixin(ImportCrafterAbstract, ModelClassCrafterAbstract):
 class ModelPrototyper(ModulePrototyperMixin):
     """
     Concrete model prototyper
+
+    Currently build a minimal Django Model class.
     """
     TOPLEVEL_IMPORTS = [
         {

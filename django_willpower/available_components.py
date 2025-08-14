@@ -39,13 +39,32 @@ DEFAULTS = [
     Component(
         name="Application choices",
         code="appchoices",
-        # directory="models",
         modules=[
             Module(
                 name="Model choices",
                 code="choices",
                 template="choices.py",
                 destination_pattern="choices.py",
+                once=True,
+            ),
+        ]
+    ),
+    Component(
+        name="Application forms",
+        code="appforms",
+        directory="forms",
+        modules=[
+            Module(
+                name="Form module",
+                code="module",
+                template="forms/module.py",
+                destination_pattern="{modelname}.py",
+            ),
+            Module(
+                name="Forms init",
+                code="init",
+                template="forms/__init__.py",
+                destination_pattern="__init__.py",
                 once=True,
             ),
         ]
