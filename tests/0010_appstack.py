@@ -20,10 +20,6 @@ def test_initialize_application(tmp_path):
     expect_msg = "required positional arguments: 'name', 'code', and 'destination'"
     assert expect_msg in str(excinfo.value)
 
-    # Currently argument values type are not validated
-    app = Application(name=1, code=42, destination="foo")
-    assert app.code == 42
-
     # The righ way
     app = Application(name="Dummy", code="dummy", destination=tmp_path)
     assert app.code == "dummy"
@@ -40,10 +36,6 @@ def test_initialize_component():
 
     expect_msg = "required positional arguments: 'name' and 'code'"
     assert expect_msg in str(excinfo.value)
-
-    # Currently argument values type are not validated
-    app = Component(name=1, code=42)
-    assert app.code == 42
 
     # The righ way
     app = Component(name="Dummy", code="dummy")
@@ -64,10 +56,6 @@ def test_initialize_module():
         "'destination_pattern'"
     )
     assert expect_msg in str(excinfo.value)
-
-    # Currently argument values type are not validated
-    app = Module(name=1, code=42, template=999, destination_pattern=100)
-    assert app.code == 42
 
     # The righ way
     app = Module(

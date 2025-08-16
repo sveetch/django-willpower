@@ -15,24 +15,23 @@ class AppBuilder:
     """
     Build everything for the application.
 
-    .. TODO::
+    Principle is to build model modules for each component of an application.
 
-        Principle is to build model modules for each component of an application.
+    * Only a single application can be managed;
+    * An application have many components (model, form, view, etc..);
+    * An application have many models;
+    * A model have many fields;
+    * Each component have a module for each application model;
+    * A field describes model field and form field but may also defines what to
+        test on model from a component, what to display in template, etc..
 
-        * Only a single application can be managed;
-        * An application have many components (model, form, view, etc..);
-        * An application have many models;
-        * A model have many fields;
-        * Each component have a module for each application model;
-        * A field describes model field and form field but may also defines what to
-          test on model from a component, what to display in template, etc..
+    Structure ::
 
-        Structure ::
-
-            - Application
-              └── Component{1,n}
-                  └── Module{1,n}
-                      └── Field{1,n}
+        - Application
+        └── Component{1,n}
+            └── Module{1,n}
+                └── DataModel{1,n}
+                    └── Field{1,n}
 
     """
     def __init__(self, logger, appmanifest, projectdir, declarations,

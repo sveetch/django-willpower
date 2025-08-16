@@ -1,0 +1,146 @@
+{
+    "name": null,
+    "code": null,
+    "destination": null,
+    "components": [
+        {
+            "name": "Application model",
+            "code": "appmodel",
+            "directory": "models",
+            "modules": [
+                {
+                    "name": "Model module",
+                    "code": "module",
+                    "template": "models/module.py",
+                    "destination_pattern": "{modelname}.py"
+                },
+                {
+                    "name": "Model init",
+                    "code": "init",
+                    "template": "models/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application choices",
+            "code": "appchoices",
+            "modules": [
+                {
+                    "name": "Model choices",
+                    "code": "choices",
+                    "template": "choices.py",
+                    "destination_pattern": "choices.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application forms",
+            "code": "appforms",
+            "directory": "forms",
+            "modules": [
+                {
+                    "name": "Form module",
+                    "code": "module",
+                    "template": "forms/module.py",
+                    "destination_pattern": "{modelname}.py"
+                },
+                {
+                    "name": "Forms init",
+                    "code": "init",
+                    "template": "forms/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application admins",
+            "code": "appadmins",
+            "directory": "admin",
+            "modules": [
+                {
+                    "name": "Admin module",
+                    "code": "module",
+                    "template": "admin/module.py",
+                    "destination_pattern": "{modelname}.py"
+                },
+                {
+                    "name": "Admin init",
+                    "code": "init",
+                    "template": "admin/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application URLs",
+            "code": "appurls",
+            "directory": "urls",
+            "modules": [
+                {
+                    "name": "URLs module",
+                    "code": "module",
+                    "template": "urls/module.py",
+                    "destination_pattern": "{modelname}.py"
+                },
+                {
+                    "name": "URLs init",
+                    "code": "init",
+                    "template": "urls/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application views",
+            "code": "appviews",
+            "directory": "views",
+            "modules": [
+                {
+                    "name": "Views module",
+                    "code": "module",
+                    "template": "views/module.py",
+                    "destination_pattern": "{modelname}.py"
+                },
+                {
+                    "name": "Views init",
+                    "code": "init",
+                    "template": "views/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application templates",
+            "code": "apptemplates",
+            "directory": "templates",
+            "modules": [
+                {
+                    "name": "Index template",
+                    "code": "index",
+                    "template": "templates/model_index.html",
+                    "destination_pattern": "{appname}/{modelname}/index.html"
+                },
+                {
+                    "name": "Detail template",
+                    "code": "detail",
+                    "template": "templates/model_detail.html",
+                    "destination_pattern": "{appname}/{modelname}/detail.html"
+                },
+                {
+                    "name": "Menu template",
+                    "code": "detail",
+                    "template": "templates/menu.html",
+                    "destination_pattern": "{appname}/menu.html",
+                    "once": true
+                }
+            ]
+        }
+    ]
+}
