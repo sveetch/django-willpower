@@ -1,0 +1,28 @@
+{
+    "name": "Blog",
+    "code": "blog",
+    "destination": "blog/",
+    "components": [
+        {
+            "name": "Application views",
+            "code": "appviews",
+            "directory": "views",
+            "modules": [
+                {
+                    "name": "Views module",
+                    "code": "module",
+                    "template": "views/module.py",
+                    "destination_pattern": "{modelname}.py",
+                    "once": false
+                },
+                {
+                    "name": "Views init",
+                    "code": "init",
+                    "template": "views/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        }
+    ]
+}

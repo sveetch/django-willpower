@@ -80,6 +80,15 @@ Todo
   - [ ] Useless components that are generated and so overwritten from the app builder;
   - [ ] Cookie options that stand on hooks (or we may restore hooks);
 
+- [ ] Datamodels refactoring:
+
+  - [ ] 'Component' should be aware of its enabled 'Module' objects;
+  - [ ] 'Module' should be aware of its 'Component' object;
+  - [ ] 'DataModel' should be aware of its enabled 'Field' objects;
+  - [ ] 'Field' should be aware of its 'DataModel' object;
+  - [ ] There may be a 'Application' data model that would be aware of its Component
+    object (and vice versa);
+
 - [~] Basic components:
 
   - [x] Models;
@@ -89,8 +98,22 @@ Todo
   - [x] Templates;
   - [x] Choices;
   - [ ] Factories;
-  - [ ] DAL view;
-  - [ ] Forms;
+  - [!] Relationnal model autocompletion widget in admin forms;
+
+    - [ ] Model declaration need a new option attribute to specify a list of relationnal
+      fields to display with an autocomplete widget;
+    - [ ] HOLD ON: Django admin already have a builtin autocomplete feature with
+      'select2', it can be enabled with 'ModelAdmin.autocomplete_fields', this is to
+      be experimentated first instead of using library  "Django Autocomplet Light";
+
+  - [~] Forms:
+
+    - [x] For admin because we often have some rules or widgets to customize (read only
+      fields for automatical dates);
+    - [?] For frontend: This would be a useful feature but optional, not all application
+      needs to implement frontend forms (and it would require additional view and
+      template);
+
   - [ ] Settings;
   - [ ] Extra components:
 

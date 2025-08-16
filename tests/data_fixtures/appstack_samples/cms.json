@@ -1,0 +1,35 @@
+{
+    "name": "CMS",
+    "code": "cms",
+    "destination": "cms/",
+    "components": [
+        {
+            "name": "Application views",
+            "code": "appviews",
+            "directory": "views",
+            "modules": [
+                {
+                    "name": "Views module",
+                    "code": "module",
+                    "template": "views/module.py",
+                    "destination_pattern": "{modelname}.py",
+                    "once": false
+                }
+            ]
+        },
+        {
+            "name": "Application plugins",
+            "code": "applugins",
+            "directory": "plugins",
+            "modules": [
+                {
+                    "name": "Plugins module",
+                    "code": "module",
+                    "template": "plugins/module.py",
+                    "destination_pattern": "{modelname}.py",
+                    "once": false
+                }
+            ]
+        }
+    ]
+}
