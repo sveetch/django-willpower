@@ -10,8 +10,7 @@ from django_willpower.core import Application, Component, Module
 
 def test_initialize_application(tmp_path):
     """
-    We except there is no error on Application init if all required arguments are
-    given.
+    We except no error on Application init if all required arguments are given.
     """
     # Without required arguments
     with pytest.raises(TypeError) as excinfo:
@@ -27,8 +26,7 @@ def test_initialize_application(tmp_path):
 
 def test_initialize_component():
     """
-    We except there is no error on Component init if all required arguments are
-    given.
+    We except no error on Component init if all required arguments are given.
     """
     # Without required arguments
     with pytest.raises(TypeError) as excinfo:
@@ -44,8 +42,7 @@ def test_initialize_component():
 
 def test_initialize_module():
     """
-    We except there is no error on Module init if all required arguments are
-    given.
+    We except no error on Module init if all required arguments are given.
     """
     # Without required arguments
     with pytest.raises(TypeError) as excinfo:
@@ -67,7 +64,7 @@ def test_initialize_module():
     assert app.code == "dummy"
 
 
-def test_initialize_appstack(settings):
+def test_appstack_glue(settings):
     """
     The application stack should be correctly initialized with deep linking and a
     safe way to represent it as a dict.

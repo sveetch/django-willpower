@@ -2,6 +2,7 @@
     "name": "Blog",
     "code": "blog",
     "destination": "blog/",
+    "models": [],
     "components": [
         {
             "name": "Application views",

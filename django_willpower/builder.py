@@ -13,6 +13,8 @@ from .available_components import DEFAULTS as DEFAULT_COMPONENTS
 
 class AppBuilder:
     """
+    DEPRECATED
+
     Build everything for the application.
 
     Principle is to build model modules for each component of an application.

@@ -10,10 +10,15 @@ from "available_components" once finished.
 
     Cloning or copying datamodel object may lead to the same issue (unchecked yet).
 """
-from dataclasses import dataclass, field, fields as get_fields
+from dataclasses import (
+    dataclass,
+    field as dataclasses_field,
+    fields as dataclasses_fields
+)
 from pathlib import Path
 from typing import Any
 
+from ..utils.texts import text_to_class_name, text_to_module_name
 
 @dataclass
 class Field:
@@ -34,10 +39,12 @@ class Field:
     """
     name: str
     label: str = ""
+    # Link to its DataModel
+    model: Any = None
     # Should be required positionnal argument instead if we dont specialize fields
     # in multiple dataclasses
     kind: str = "CharField"
-    modelfield_template: str = ""
+    modelfield_template: str = "" # TODO Rename to just 'template'
     default: str = None  # Type should be UNION or ANY to allow for None
     required: bool = False
     nullable: bool = False
@@ -58,7 +65,7 @@ class Field:
     # Commentary just for developer, not used in templates
     comment: str = ""
     # A list of choices
-    choices_list: list[str] = field(default_factory=list)
+    choices_list: list[str] = dataclasses_field(default_factory=list)
 
     def __post_init__(self):
         """
@@ -76,37 +83,42 @@ class DataModel:
     """
     Model descriptor and its features for components.
 
+    TODO: name should be validated to be a valid Python class name
+
     Arguments:
-        app (string): The model application module name.
         name (string): The model name. Commonly it should start with an uppercase
             alphabet character.
-        **kwargs: All non positionnal arguments are automatically built if empty.
+        **kwargs: All non positionnal arguments are automatically filled if empty.
+
+    Keyword Arguments:
+        app (Application): The application object which this model is linked to.
+
     """
-    # The application name this model belong to
-    app: str
     # The model class name
     name: str
+    # Link to its Application
+    app: Any = None
     # The verbose label in single and plural forms
     verbose_single: str = ""
     verbose_plural: str = ""
     # List of Field objects to define model fields
-    modelfields: list[Field] = field(default_factory=list)
+    modelfields: list[Field] = dataclasses_field(default_factory=list)
     # List of model inline admin classes to include
-    admin_inline_models: list[str] = field(default_factory=list)
+    admin_inline_models: list[str] = dataclasses_field(default_factory=list)
     # Define if model should provide an inline admin "{model_name}AdminInline" (NOT IMPLEMENTED YET)
     provide_inline: bool = False
     # Default order to define in model and to apply in views
-    default_order: list[str] = field(default_factory=list)
+    default_order: list[str] = dataclasses_field(default_factory=list)
     # The fields where to performing search like for admin or generate haystack index
-    search_fields: list[str] = field(default_factory=list)
+    search_fields: list[str] = dataclasses_field(default_factory=list)
     # List of read only field names
-    readonly_fields: list[str] = field(default_factory=list)
+    readonly_fields: list[str] = dataclasses_field(default_factory=list)
     # List of field prepopulation
-    prepopulated_fields: dict = field(default_factory=dict)
+    prepopulated_fields: dict = dataclasses_field(default_factory=dict)
     # For the admin only
-    list_filter: list[str] = field(default_factory=list)
+    list_filter: list[str] = dataclasses_field(default_factory=list)
     # Usually only for admin
-    admin_list_display: list[str] = field(default_factory=list)
+    admin_list_display: list[str] = dataclasses_field(default_factory=list)
     # Common name for a Python module or Python variable
     module_name: str = ""
     module_name_plural: str = ""
@@ -138,7 +150,7 @@ class DataModel:
              self.verbose_plural = self.verbose_single + "s"
 
         if not self.module_name:
-             self.module_name = self.name.lower()
+             self.module_name = text_to_module_name(self.name)
 
         if not self.module_name_plural:
              self.module_name_plural = self.module_name + "s"
@@ -160,3 +172,16 @@ class DataModel:
 
         if not self.view_basename and self.view_basename is not None:
              self.view_basename = "{}{{}}View".format(self.name)
+
+        # Automatically link fields
+        self.set_fields(self.modelfields, from_init=True)
+
+    def set_fields(self, fields, from_init=False):
+        """
+        Append items to model fields while linking them to this model.
+        """
+        for item in fields:
+            item.model = self
+
+        if not from_init:
+            self.modelfields.extend(fields)

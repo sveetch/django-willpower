@@ -15,8 +15,8 @@ class ProjectRegistry:
     Attributes:
         apps (dict): A dictionnary of registered ``Application`` objects.
     """
-    def __init__(self):
-        self.apps = {}
+    def __init__(self, apps=None):
+        self.apps = apps or {}
 
     def add_application(self, appconfig, name=None, code=None, destination=None):
         """
@@ -33,8 +33,10 @@ class ProjectRegistry:
         """
         if name:
             appconfig["name"] = name
+
         if code:
             appconfig["code"] = code
+
         if destination:
             appconfig["destination"] = destination
 
@@ -48,6 +50,9 @@ class ProjectRegistry:
                 "Application configuration must include a non empty 'name', 'code' "
                 "and 'destination'."
             ))
+        elif appconfig.get("code") in self.apps:
+            msg = "Given Application code is already registered: {}"
+            raise ValueError(msg.format(appconfig.get("code")))
 
         code_key = appconfig["code"]
 

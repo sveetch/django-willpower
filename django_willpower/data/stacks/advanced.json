@@ -2,6 +2,7 @@
     "name": null,
     "code": null,
     "destination": null,
+    "models": [],
     "components": [
         {
             "name": "Application model",

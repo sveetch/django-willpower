@@ -29,6 +29,13 @@ def test_register_application(settings):
     assert blog_config == project.apps["blog"].as_dict()
     assert cms_config == project.apps["cms"].as_dict()
 
+    # Application code must be unique in registry
+    with pytest.raises(ValueError) as excinfo:
+        project.add_application(blog_config)
+
+    expect_msg = "Given Application code is already registered: blog"
+    assert expect_msg == str(excinfo.value)
+
 
 def test_registry_finding(settings):
     """

@@ -1,0 +1,103 @@
+import json
+
+from pathlib import Path
+from dataclasses import asdict
+
+import pytest
+
+from django_willpower.core import Application, Component, Module, DataModel, Field
+
+
+def test_initialize_datamodel(tmp_path):
+    """
+    We except no error on DataModel init if all required arguments are given.
+    """
+    # Without required arguments
+    with pytest.raises(TypeError) as excinfo:
+        DataModel()
+
+    expect_msg = "required positional argument: 'name'"
+    assert expect_msg in str(excinfo.value)
+
+    # The righ way
+    model = DataModel(name="DummyThing")
+    assert model.name == "DummyThing"
+    assert model.verbose_single == "dummything"
+    assert model.verbose_plural == "dummythings"
+    assert model.module_name == "dummything"
+    assert model.module_filename == "dummything"
+
+
+def test_initialize_field(tmp_path):
+    """
+    We except no error on Field init if all required arguments are given.
+    """
+    # Without required arguments
+    with pytest.raises(TypeError) as excinfo:
+        Field()
+
+    expect_msg = "required positional argument: 'name'"
+    assert expect_msg in str(excinfo.value)
+
+    # The righ way
+    field = Field(name="DummyThing")
+    assert field.name == "DummyThing"
+    assert field.modelfield_template == "models/fields/CharField.py"
+
+
+def test_glue_modelfield(tmp_path):
+    """
+    Model and Field objects should be linked together.
+    """
+    # Create some model fields
+    field_title = Field(name="title")
+    field_content = Field(name="content")
+
+    model = DataModel(name="Article", modelfields=[field_title])
+
+    assert field_title.model.name == "Article"
+
+    model.set_fields([field_content])
+
+    assert field_content.model.name == "Article"
+
+    assert [v.name for v in model.modelfields] == ["title", "content"]
+
+
+def test_glue_appstack_modelfield(tmp_path):
+    """
+    Everything should be linked together.
+    """
+    # Create a full application stack
+    app = Application(
+        name="Blog",
+        code="blog",
+        destination="blog/",
+        components=[
+            Component(
+                name="Views",
+                code="views",
+                modules=[
+                    Module(
+                        name="Detail",
+                        code="detail",
+                        template="detail.py",
+                        destination_pattern="dummy/"
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    # Create some model fields apart
+    field_title = Field(name="title")
+    field_content = Field(name="content")
+    # Create model
+    model = DataModel(name="Article", modelfields=[field_title, field_content])
+
+    app.set_models([model])
+
+    # Model is well linked to app
+    assert model.app.code == "blog"
+    # And so the field can reach up to app to dig into stack
+    assert field_title.model.app.find("blog@views:detail").component.code == "views"

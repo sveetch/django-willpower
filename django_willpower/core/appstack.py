@@ -10,7 +10,7 @@ from "available_components" once finished.
 
     Cloning or copying datamodel object may lead to the same issue (unchecked yet).
 """
-from dataclasses import dataclass, field, fields as get_fields
+from dataclasses import dataclass, field, fields as dataclasses_fields
 from pathlib import Path
 from typing import Any
 
@@ -30,19 +30,23 @@ class Application:
     Keyword Arguments:
         components (string): List of enabled Component objects. May be empty on
             initialize and filled just after.
+        models (string): List of DataModel objects. May be empty on
+            initialize and filled just after.
     """
     name: str
     code: str
     destination: Path
     components: list[Any] = field(default_factory=list)
+    models: list[Any] = field(default_factory=list)
 
     def __post_init__(self):
         if ":" in self.code or "@" in self.code:
             msg = "Application.code can not contain characters ':' or '@': {}"
             raise ValueError(msg.format(self.code))
 
-        # Automatically link components
+        # Automatically link sub objects relations
         self.set_components(self.components, from_init=True)
+        self.set_models(self.models, from_init=True)
 
     def set_components(self, components, from_init=False):
         """
@@ -53,6 +57,16 @@ class Application:
 
         if not from_init:
             self.components.extend(components)
+
+    def set_models(self, models, from_init=False):
+        """
+        Append to models while linking them to this Application.
+        """
+        for item in models:
+            item.app = self
+
+        if not from_init:
+            self.models.extend(models)
 
     def get_path(self):
         """
@@ -145,7 +159,7 @@ class Application:
                 if f.name != "components"
                 else [c.as_dict() for c in getattr(self, f.name)]
             )
-            for f in get_fields(self)
+            for f in dataclasses_fields(self)
         }
 
 
@@ -216,7 +230,7 @@ class Component:
                 if f.name != "modules"
                 else [c.as_dict() for c in getattr(self, f.name)]
             )
-            for f in get_fields(self)
+            for f in dataclasses_fields(self)
             if f.name != "app"
         }
 
@@ -277,6 +291,6 @@ class Module:
         """
         return {
             f.name: getattr(self, f.name)
-            for f in get_fields(self)
+            for f in dataclasses_fields(self)
             if f.name != "component"
         }

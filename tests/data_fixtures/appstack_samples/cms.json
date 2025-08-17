@@ -2,6 +2,7 @@
     "name": "CMS",
     "code": "cms",
     "destination": "cms/",
+    "models": [],
     "components": [
         {
             "name": "Application views",
