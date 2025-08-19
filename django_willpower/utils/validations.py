@@ -10,7 +10,7 @@ def validate_json(logger, path, clickapi=None):
         path (pathlib.Path): The file path.
 
     Keyword Arguments:
-        clickapi (click): The Click module to use to abort program in case of error.
+        clickapi (click): The Click module used to abort program in case of error.
 
     Returns:
         object: Either an object from deserialized JSON if valid else return the

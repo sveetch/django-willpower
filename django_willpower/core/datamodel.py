@@ -1,9 +1,6 @@
 """
-NOTE: This is the new to modelize application stack and should replace the old ones
-from "available_components" once finished.
-
 .. Warning::
-    Because datamodels are connected each other you will probably not be able to use
+    Because these classes are connected together you will probably not be able to use
     ``dataclasses.asdict`` or ``dataclasses.astuple`` with any of them since these
     methods are recursive and would lead to a recursion limit error (because app A would
     include component Z that would link to app A that would include component Z, etc..).
@@ -20,6 +17,7 @@ from typing import Any
 
 from ..utils.texts import text_to_class_name, text_to_module_name
 
+
 @dataclass
 class Field:
     """
@@ -28,7 +26,8 @@ class Field:
     There are many arguments but not all have meaning for all modules, some modules
     may use them or not.
 
-    TODO: The field should be linkable to a DataModel
+    TODO: There may be too many attributes for various things, may be we should just
+    move non essential ones to an attribute 'options' (dict). Beware of mutations.
 
     .. Todo::
         To be better we would need to make a dataclass for each field, this would be
@@ -55,7 +54,10 @@ class Field:
     auto_update: bool = False
     min_value: int = None  # Type should be UNION or ANY to allow for None
     max_value: int = None  # Type should be UNION or ANY to allow for None
-    target: str = "" # Empty target for a relation should be an error
+    # Target value allows for an optional pattern '{app}' to replace with model
+    # application name
+    # Empty target for a relation should be an error
+    target: str = ""
     related_name: str = ""
     on_delete: str = ""
     # May be delegated elsewhere for a list of all displayed fields
@@ -77,6 +79,22 @@ class Field:
         if not self.label:
              self.label = self.name
 
+        if self.target and self.model and self.model.app:
+            self.target = self.target.format(app=self.model.app.code)
+
+    def as_dict(self):
+        """
+        A safe way to convert to a dict without recursion issues.
+
+        Returns:
+            dict: ``model`` attribute is omitted.
+        """
+        return {
+            f.name: getattr(self, f.name)
+            for f in dataclasses_fields(self)
+            if f.name != "model"
+        }
+
 
 @dataclass
 class DataModel:
@@ -84,6 +102,10 @@ class DataModel:
     Model descriptor and its features for components.
 
     TODO: name should be validated to be a valid Python class name
+
+    TODO: There may be too many attribute for various things, may be we should just
+    move non essential ones to an attribute 'options' (dict) or 'admin_options',
+    'view_options', etc.. Beware of mutations.
 
     Arguments:
         name (string): The model name. Commonly it should start with an uppercase
@@ -140,8 +162,6 @@ class DataModel:
         """
         Initialize empty positionnal argument value except if they are none which is
         assumed to avoid a component.
-
-        NOTE: Not all these args should be optional with null value.
         """
         if not self.verbose_single:
              self.verbose_single = self.name.lower()
@@ -185,3 +205,21 @@ class DataModel:
 
         if not from_init:
             self.modelfields.extend(fields)
+
+    def as_dict(self):
+        """
+        Safe way to convert to a dict without recursion issues.
+
+        Returns:
+            dict: ``app`` attribute is omitted and ``modelfields`` items are serialized
+            using their ``as_dict()`` method.
+        """
+        return {
+            f.name: (
+                getattr(self, f.name)
+                if f.name != "modelfields"
+                else [c.as_dict() for c in getattr(self, f.name)]
+            )
+            for f in dataclasses_fields(self)
+            if f.name != "app"
+        }

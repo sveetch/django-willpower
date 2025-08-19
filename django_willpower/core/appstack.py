@@ -1,7 +1,4 @@
 """
-NOTE: This is the new to modelize application stack and should replace the old ones
-from "available_components" once finished.
-
 .. Warning::
     Because datamodels are connected each other you will probably not be able to use
     ``dataclasses.asdict`` or ``dataclasses.astuple`` with any of them since these
@@ -15,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from ..utils.stackpath import split_stack_path
+from .datamodel import Field, DataModel
 
 
 @dataclass
@@ -25,9 +23,13 @@ class Application:
     Arguments:
         name (string): Label name
         code (string): Unique (amongst all application modules) code name.
-        destination (string):
+        destination (string): Destination path where all application components will be
+            created. This is a relative path to the project directory.
 
     Keyword Arguments:
+        template_dir (pathlib.Path): Although it is an optional argument it must be
+            filled to be processed in builder. It is likely to be defined during
+            application registering.
         components (string): List of enabled Component objects. May be empty on
             initialize and filled just after.
         models (string): List of DataModel objects. May be empty on
@@ -35,7 +37,8 @@ class Application:
     """
     name: str
     code: str
-    destination: Path
+    destination: str = ""
+    template_dir: Path = None
     components: list[Any] = field(default_factory=list)
     models: list[Any] = field(default_factory=list)
 
@@ -48,25 +51,18 @@ class Application:
         self.set_components(self.components, from_init=True)
         self.set_models(self.models, from_init=True)
 
-    def set_components(self, components, from_init=False):
+    def get_destination(self, context=None):
         """
-        Append to components while linking them to this Application.
-        """
-        for item in components:
-            item.app = self
+        Return the full (from app directory) component directory.
 
-        if not from_init:
-            self.components.extend(components)
+        Keyword Arguments:
+            context (dict): This argument exist for signature compatibility with other
+                ``get_destination`` method but is never used.
 
-    def set_models(self, models, from_init=False):
+        Returns:
+            pathlib.Path: The full destination path.
         """
-        Append to models while linking them to this Application.
-        """
-        for item in models:
-            item.app = self
-
-        if not from_init:
-            self.models.extend(models)
+        return Path(self.destination)
 
     def get_path(self):
         """
@@ -77,6 +73,108 @@ class Application:
                 nothing higher.
         """
         return self.code
+
+    def as_dict(self):
+        """
+        A safe way to convert to a dict without recursion issues.
+
+        Returns:
+            dict: ``components`` item are serialized using their ``as_dict()`` method.
+        """
+        return {
+            f.name: (
+                getattr(self, f.name)
+                if f.name not in ["components", "models"]
+                else [c.as_dict() for c in getattr(self, f.name)]
+            )
+            for f in dataclasses_fields(self)
+        }
+
+    def set_components(self, components, from_init=False):
+        """
+        Append items to components while linking them to this Application.
+
+        Arguments:
+            components (list): List of Component objects.
+
+        Keyword Arguments:
+            from_init (bool): If true this will not append objects to
+                ``Application.components`` list. This is only useful when calling this
+                method from class init and avoid recursion. Default value is false.
+        """
+        for item in components:
+            item.app = self
+
+        if not from_init:
+            self.components.extend(components)
+
+    def set_models(self, models, from_init=False):
+        """
+        Append items to models while linking them to this Application.
+
+        Arguments:
+            models (list): List of DataModel objects.
+
+        Keyword Arguments:
+            from_init (bool): If true this will not append objects to
+                ``Application.models`` list. This is only useful when calling this
+                method from class init and avoid recursion. Default value is false.
+        """
+        for item in models:
+            item.app = self
+
+        if not from_init:
+            self.models.extend(models)
+
+    def load_models(self, declarations):
+        """
+        Load and set DataModel and Field objects from a declaration dict.
+
+        Arguments:
+            declarations (dict): A dictionnary of Model declarations.
+
+        Returns:
+            list: A list of ``DataModel`` objects with their ``Field`` objects for
+            defined model declarations.
+        """
+        for modelname, modelopts in declarations.items():
+            model = DataModel(
+                app=self.name,
+                name=modelname,
+                # Load fields as Field object
+                modelfields=[
+                    Field(name=fieldname, **fieldopts)
+                    for fieldname, fieldopts in modelopts["fields"].items()
+                ],
+                # All other model items are passed as keyword arguments however
+                # they must be defined as datamodel attribute before.
+                **{
+                    k: v
+                    for k, v in modelopts.items()
+                    if k != "fields"
+                }
+            )
+            self.set_models([model])
+
+    def get_model(self, name, **kwargs):
+        """
+        Get a single model from its name.
+
+        Arguments:
+            name (string): Model name.
+
+        Keyword Arguments:
+            default (any): Default value to return in case of missing model name. If
+                not given a missing model name will raise a ``IndexError`` exception.
+        """
+        for item in self.models:
+            if item.name == name:
+                return item
+
+        if "default" in kwargs:
+            return kwargs["default"]
+        else:
+            raise IndexError("There is no model with name: {}".format(name))
 
     def find(self, path):
         """
@@ -146,22 +244,6 @@ class Application:
 
         return found_module
 
-    def as_dict(self):
-        """
-        A safe way to convert to a dict without recursion issues.
-
-        Returns:
-            dict: ``components`` item are serialized using their ``as_dict()`` method.
-        """
-        return {
-            f.name: (
-                getattr(self, f.name)
-                if f.name != "components"
-                else [c.as_dict() for c in getattr(self, f.name)]
-            )
-            for f in dataclasses_fields(self)
-        }
-
 
 @dataclass
 class Component:
@@ -196,12 +278,41 @@ class Component:
     def set_modules(self, modules, from_init=False):
         """
         Append to modules while linking them to this component.
+
+        Arguments:
+            modules (list): List of Module objects.
+
+        Keyword Arguments:
+            from_init (bool): If true this will not append objects to
+                ``Component.modules`` list. This is only useful when calling this
+                method from class init and avoid recursion. Default value is false.
         """
         for item in modules:
             item.component = self
 
         if not from_init:
             self.modules.extend(modules)
+
+    def get_destination(self, context=None):
+        """
+        Return the full (from app directory) component directory.
+
+        Keyword Arguments:
+            context (dict): This argument exist for signature compatibility with other
+                ``get_destination`` method but is never used.
+
+        Returns:
+            pathlib.Path: The full destination path from the application to this
+            component.
+        """
+        if not self.app:
+            raise ValueError(
+                "A component without link to application can not use the method '{}'".format(
+                    "get_destination()"
+                )
+            )
+
+        return self.app.get_destination() / self.directory
 
     def get_path(self):
         """
@@ -268,6 +379,31 @@ class Module:
         if ":" in self.code or "@" in self.code:
             msg = "Module.code can not contain characters ':' or '@': {}"
             raise ValueError(msg.format(self.code))
+
+    def get_destination(self, context=None):
+        """
+        Return the full (from app directory) module directory with patterns resolved.
+
+        Keyword Arguments:
+            context (dict): A dictionnary of pattern values for formatting destination.
+
+        Returns:
+            pathlib.Path: The full destination path from the application to this module.
+        """
+        if not self.component:
+            raise ValueError(
+                "A module without link to component can not use the method '{}'".format(
+                    "get_destination()"
+                )
+            )
+        context = context or {}
+
+        if not context:
+            path = self.destination_pattern
+        else:
+            path = self.destination_pattern.format(**context)
+
+        return self.component.get_destination() / path
 
     def get_path(self):
         """

@@ -1,3 +1,6 @@
+"""
+DEPRECATED: in favor of core.builder
+"""
 import json
 import sys
 from pathlib import Path

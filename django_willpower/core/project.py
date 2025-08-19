@@ -1,8 +1,3 @@
-"""
-NOTE: This is the new to modelize application stack and should replace registry once
-finished.
-
-"""
 from ..utils.stackpath import split_stack_path
 
 from .appstack import Application, Component, Module
@@ -18,19 +13,25 @@ class ProjectRegistry:
     def __init__(self, apps=None):
         self.apps = apps or {}
 
-    def add_application(self, appconfig, name=None, code=None, destination=None):
+    def add_application(self, appconfig, template_dir, name=None, code=None,
+                        destination=None):
         """
         Add a new application structure configuration.
 
         Arguments:
             appconfig (dict): Application config with its possible components and
                 modules.
+            template_dir (pathlib.Path): Directory where to search for templates.
+                TODO: Unused yet, it should be attached on something, probably the
+                Application itself.
 
         Keyword Arguments:
             name (string):
             code (string):
             destination (pathlib.Path):
         """
+        appconfig["template_dir"] = template_dir
+
         if name:
             appconfig["name"] = name
 
@@ -81,6 +82,16 @@ class ProjectRegistry:
 
             # Link component to application
             self.apps[code_key].set_components([cpt_object])
+
+    def add_app_models(self, appname, models):
+        """
+        Load and link models to an application.
+
+        Arguments:
+            appname (string):
+            models (dict):
+        """
+        self.apps[appname].load_models(models)
 
     def find(self, path):
         """

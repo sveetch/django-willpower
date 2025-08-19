@@ -1,6 +1,7 @@
 """
 Pytest fixtures
 """
+import json
 from pathlib import Path
 
 import pytest
@@ -27,12 +28,15 @@ class FixturesSettingsTestMixin(object):
         ).parents[0].resolve()
 
         self.package_path = self.application_path.parent
+        self.data_path = self.application_path / "data"
 
         self.tests_dir = "tests"
         self.tests_path = self.package_path / self.tests_dir
 
         self.fixtures_dir = "data_fixtures"
         self.fixtures_path = self.tests_path / self.fixtures_dir
+
+        self.configs_path = self.fixtures_path / "config_samples"
 
     def format(self, content):
         """
@@ -77,3 +81,19 @@ def settings():
                 print(settings.format("Application version: {VERSION}"))
     """
     return FixturesSettingsTestMixin()
+
+
+@pytest.fixture(scope="module")
+def load_json():
+    """
+    Return a function to load a JSON from a path.
+
+    Example:
+        You may use it like this: ::
+
+            load_json(path)
+    """
+    def func(path):
+        return json.loads(path.read_text())
+
+    return func

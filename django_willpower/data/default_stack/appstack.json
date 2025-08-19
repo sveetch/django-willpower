@@ -2,6 +2,7 @@
     "name": null,
     "code": null,
     "destination": null,
+    "template_dir": null,
     "models": [],
     "components": [
         {
@@ -13,7 +14,7 @@
                     "name": "Model module",
                     "code": "module",
                     "template": "models/module.py",
-                    "destination_pattern": "{modelname}.py"
+                    "destination_pattern": "{model}.py"
                 },
                 {
                     "name": "Model init",
@@ -46,7 +47,7 @@
                     "name": "Form module",
                     "code": "module",
                     "template": "forms/module.py",
-                    "destination_pattern": "{modelname}.py"
+                    "destination_pattern": "{model}.py"
                 },
                 {
                     "name": "Forms init",
@@ -66,7 +67,7 @@
                     "name": "Admin module",
                     "code": "module",
                     "template": "admin/module.py",
-                    "destination_pattern": "{modelname}.py"
+                    "destination_pattern": "{model}.py"
                 },
                 {
                     "name": "Admin init",
@@ -86,7 +87,7 @@
                     "name": "URLs module",
                     "code": "module",
                     "template": "urls/module.py",
-                    "destination_pattern": "{modelname}.py"
+                    "destination_pattern": "{model}.py"
                 },
                 {
                     "name": "URLs init",
@@ -106,7 +107,7 @@
                     "name": "Views module",
                     "code": "module",
                     "template": "views/module.py",
-                    "destination_pattern": "{modelname}.py"
+                    "destination_pattern": "{model}.py"
                 },
                 {
                     "name": "Views init",
@@ -126,19 +127,19 @@
                     "name": "Index template",
                     "code": "index",
                     "template": "templates/model_index.html",
-                    "destination_pattern": "{appname}/{modelname}/index.html"
+                    "destination_pattern": "{app}/{model}/index.html"
                 },
                 {
                     "name": "Detail template",
                     "code": "detail",
                     "template": "templates/model_detail.html",
-                    "destination_pattern": "{appname}/{modelname}/detail.html"
+                    "destination_pattern": "{app}/{model}/detail.html"
                 },
                 {
                     "name": "Menu template",
                     "code": "detail",
                     "template": "templates/menu.html",
-                    "destination_pattern": "{appname}/menu.html",
+                    "destination_pattern": "{app}/menu.html",
                     "once": true
                 }
             ]

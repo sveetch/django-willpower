@@ -1,3 +1,6 @@
+"""
+DEPRECATED: in favor of core dataclasses
+"""
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 

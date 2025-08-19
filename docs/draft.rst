@@ -59,6 +59,9 @@ code in any ways.
 Todo
 ****
 
+Main
+----
+
 - [x] Try to build model from declaration fields, for now we may start in the same
   unique module to quickly see how it would be feasible, we could also doing the same
   for views or forms;
@@ -74,84 +77,106 @@ Todo
   - [x] Implement in commandline;
   - [x] Update builder code to use logs instead of print;
 
-- [ ] There is some cleaning to do in the cookiecutter templates:
-
-  - [ ] Useless components that won't be used;
-  - [ ] Useless components that are generated and so overwritten from the app builder;
-  - [ ] Cookie options that stand on hooks (or we may restore hooks);
-
-- [ ] Datamodels refactoring:
-
-  - [ ] 'Component' should be aware of its enabled 'Module' objects;
-  - [ ] 'Module' should be aware of its 'Component' object;
-  - [ ] 'DataModel' should be aware of its enabled 'Field' objects;
-  - [ ] 'Field' should be aware of its 'DataModel' object;
-  - [ ] There may be a 'Application' data model that would be aware of its Component
-    object (and vice versa);
-
-- [~] Basic components:
-
-  - [x] Models;
-  - [x] Admins;
-  - [x] URLs;
-  - [x] Views;
-  - [x] Templates;
-  - [x] Choices;
-  - [ ] Factories;
-  - [!] Relationnal model autocompletion widget in admin forms;
-
-    - [ ] Model declaration need a new option attribute to specify a list of relationnal
-      fields to display with an autocomplete widget;
-    - [ ] HOLD ON: Django admin already have a builtin autocomplete feature with
-      'select2', it can be enabled with 'ModelAdmin.autocomplete_fields', this is to
-      be experimentated first instead of using library  "Django Autocomplet Light";
-
-  - [~] Forms:
-
-    - [x] For admin because we often have some rules or widgets to customize (read only
-      fields for automatical dates);
-    - [?] For frontend: This would be a useful feature but optional, not all application
-      needs to implement frontend forms (and it would require additional view and
-      template);
-
-  - [ ] Settings;
-  - [ ] Extra components:
-
-    - [ ] Haystack index;
-    - [ ] Breadcrumbs?
-    - [ ] DRF serializer;
-    - [ ] DRF viewset;
-    - [ ] CMS plugin;
-    - [ ] django-configuration helper;
-
 - [ ] Rename 'django-willpower' to just 'willpower';
 - [ ] We seriously start lacking of test coverage, especially about components modules
   render;
-- [~] Look to build Python modules with 'ast' instead of Jinja templates because it is
-  more efficient for code quality (indentation, space and condition is painful to
-  manage well with Jinja, this could lead to problems to maintain or evolve templates);
 
-  - [x] Check 'ast' is usable to build code;
-  - [x] Start code prototyping with models;
-  - [~] Finish the Model prototyping;
-  - [ ] Continue with other models;
-  - [ ] Alternatively we could use ast prototyping only for some parts like model
-    fields and keep using Jinja as the base. The ast prototyping would be specialized
-    to some specific part and have a Jinja filter for it (like a
-    ``build_model_fields``) but the filter would still need an argument to manage
-    indentation from the built code;
 
-    - [ ] Dataclasses may include method to prototype some parts ?
+Cleaning in the cookiecutter templates
+--------------------------------------
 
-  - [ ] We could also change the build to be hybrid, each module could be built either
-    from a Jinja template or an ast prototyper;
+- [ ] Useless components that won't be used;
+- [ ] Useless components that are generated and so overwritten from the app builder;
+- [ ] Cookie options that stand on hooks (or we may restore hooks);
 
-- [ ] We probably should use Pydantic to validate model dataclasses;
+
+Datamodels refactoring
+----------------------
+
+- [x] 'Component' should be aware of its enabled 'Module' objects;
+- [x] 'Module' should be aware of its 'Component' object;
+- [x] 'DataModel' should be aware of its enabled 'Field' objects;
+- [x] 'Field' should be aware of its 'DataModel' object;
+- [x] There may be a 'Application' data model that would be aware of its Component
+  object (and vice versa);
+- [ ] Builder update;
+- [ ] Cleaning old stuff and promote the core refactoring ;
+
+
+Basic component templates
+-------------------------
+
+- [x] Models;
+- [x] Admins;
+- [x] URLs;
+- [x] Views;
+- [x] Templates;
+- [x] Choices;
+- [ ] Factories;
+- [ ] Relationnal model autocompletion widget in admin forms;
+
+  - [ ] Model declaration need a new option attribute to specify a list of relationnal
+    fields to display with an autocomplete widget;
+  - [ ] HOLD ON: Django admin already have a builtin autocomplete feature with
+    'select2', it can be enabled with 'ModelAdmin.autocomplete_fields', this is to
+    be experimentated first instead of using library  "Django Autocomplet Light";
+
+- [~] Forms:
+
+  - [x] For admin because we often have some rules or widgets to customize (read only
+    fields for automatical dates);
+  - [?] For frontend: This would be a useful feature but optional, not all application
+    needs to implement frontend forms (and it would require additional view and
+    template);
+
+- [ ] Settings;
+- [ ] Extra components:
+
+  - [ ] Haystack index;
+  - [ ] Breadcrumbs?
+  - [ ] DRF serializer;
+  - [ ] DRF viewset;
+  - [ ] CMS plugin;
+  - [ ] django-configuration helper;
+
+
+Improve validation checking
+---------------------------
+
+- [ ] We will have to introspect declarations to check for some things, actually
+  nothing is checked. Payload structure should be respected and errors should help
+  to fix, actually invalid structure will lead to exception about dataclasses or
+  worst during registering or building;
+- [ ] Command argument validation is currently very basic, in beta stage it would need
+  to validate the structure of JSON payloads for required items;
+- [ ] We may use Pydantic to validate model dataclasses but it would add a new
+  dependancy, also it would requires some changes to adapt to Pydantic dataclasses;
+
+
+Building with 'ast'
+-------------------
+
+Look to build Python modules with 'ast' instead of Jinja templates because it is
+more efficient for code quality (indentation, space and condition is painful to
+manage well with Jinja, this could lead to problems to maintain or evolve templates);
+
+- [x] Check 'ast' is usable to build code;
+- [x] Start code prototyping with models;
+- [ ] Finish the Model prototyping;
+- [ ] Continue with other models;
+- [ ] Alternatively we could use ast prototyping only for some parts like model
+  fields and keep using Jinja as the base. The ast prototyping would be specialized
+  to some specific part and have a Jinja filter for it (like a
+  ``build_model_fields``) but the filter would still need an argument to manage
+  indentation from the built code;
+- [ ] We could also change the build to be hybrid, each module could be built either
+  from a Jinja template or an ast prototyper;
+
+
+Various
+-------
+
 - [ ] Flake can be helpful to quickly see failures in generated modules from templates;
 - [ ] Optional pluralize option in model declaration would be nice;
 - [ ] Command is missing option '--version';
-- [ ] Command option validation is currently very basic, in beta stage it would need to
-  validate the structure of JSON payloads for required items;
 - [ ] YAML for declaration could be nice ?
-- [ ] We will have to introspect declarations to check for some things, actually nothing
-  is checked and it will probably lead to some invalid code when user makes a mistakes;

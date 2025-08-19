@@ -1,7 +1,8 @@
 {
-    "name": "CMS",
-    "code": "cms",
-    "destination": "cms/",
+    "name": "Dual components",
+    "code": "dual-components",
+    "destination": "dual-components",
+    "template_dir": null,
     "models": [],
     "components": [
         {
@@ -13,7 +14,7 @@
                     "name": "Views module",
                     "code": "module",
                     "template": "views/module.py",
-                    "destination_pattern": "{modelname}.py",
+                    "destination_pattern": "{model}.py",
                     "once": false
                 }
             ]
@@ -27,7 +28,7 @@
                     "name": "Plugins module",
                     "code": "module",
                     "template": "plugins/module.py",
-                    "destination_pattern": "{modelname}.py",
+                    "destination_pattern": "{model}.py",
                     "once": false
                 }
             ]

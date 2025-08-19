@@ -1,3 +1,6 @@
+"""
+DEPRECATED: in favor of new way to load appstack
+"""
 from .datamodels import Component, Module
 
 

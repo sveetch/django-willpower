@@ -1,5 +1,3 @@
-import json
-
 from pathlib import Path
 from dataclasses import asdict
 
@@ -8,7 +6,7 @@ import pytest
 from django_willpower.core import Application, Component, Module, DataModel, Field
 
 
-def test_initialize_datamodel(tmp_path):
+def test_initialize_datamodel():
     """
     We except no error on DataModel init if all required arguments are given.
     """
@@ -28,7 +26,7 @@ def test_initialize_datamodel(tmp_path):
     assert model.module_filename == "dummything"
 
 
-def test_initialize_field(tmp_path):
+def test_initialize_field():
     """
     We except no error on Field init if all required arguments are given.
     """
@@ -45,7 +43,7 @@ def test_initialize_field(tmp_path):
     assert field.modelfield_template == "models/fields/CharField.py"
 
 
-def test_glue_modelfield(tmp_path):
+def test_glue_modelfield():
     """
     Model and Field objects should be linked together.
     """
@@ -64,7 +62,7 @@ def test_glue_modelfield(tmp_path):
     assert [v.name for v in model.modelfields] == ["title", "content"]
 
 
-def test_glue_appstack_modelfield(tmp_path):
+def test_glue_appstack_modelfield():
     """
     Everything should be linked together.
     """

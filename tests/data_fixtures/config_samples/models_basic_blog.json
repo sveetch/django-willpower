@@ -1,0 +1,36 @@
+{
+    "Blog": {
+        "readonly_fields": ["created"],
+        "search_fields": ["title"],
+        "fields": {
+            "title": {
+                "kind": "CharField",
+                "required": true
+            },
+            "created": {
+                "kind": "DateTimeField",
+                "auto_creation": true
+            }
+        }
+    },
+    "Article": {
+        "fields": {
+            "blogs": {
+                "kind": "ManyToManyField",
+                "required": true,
+                "nullable": true,
+                "default": null,
+                "target": "{app}.Blog",
+                "related_name": "article",
+                "on_delete": "models.CASCADE"
+            },
+            "title": {
+                "kind": "CharField",
+                "required": true
+            },
+            "content": {
+                "kind": "TextField"
+            }
+        }
+    }
+}

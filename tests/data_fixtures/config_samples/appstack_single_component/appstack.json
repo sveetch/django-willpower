@@ -1,7 +1,8 @@
 {
-    "name": "Blog",
-    "code": "blog",
-    "destination": "blog/",
+    "name": "Single component",
+    "code": "single-component",
+    "destination": "single-component",
+    "template_dir": null,
     "models": [],
     "components": [
         {
@@ -13,7 +14,7 @@
                     "name": "Views module",
                     "code": "module",
                     "template": "views/module.py",
-                    "destination_pattern": "{modelname}.py",
+                    "destination_pattern": "{model}.py",
                     "once": false
                 },
                 {

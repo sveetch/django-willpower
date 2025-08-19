@@ -1,0 +1,19 @@
+{
+    "Page": {
+        "verbose_single": "CMS Page",
+        "readonly_fields": ["created"],
+        "fields": {
+            "title": {
+                "kind": "CharField",
+                "required": true
+            },
+            "created": {
+                "kind": "DateTimeField",
+                "auto_creation": true
+            },
+            "content": {
+                "kind": "TextField"
+            }
+        }
+    }
+}
