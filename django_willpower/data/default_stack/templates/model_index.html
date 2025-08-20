@@ -1,4 +1,4 @@
-{{ '{%' }} extends "{{ app }}/base.html" {{ '%}' }}
+{{ '{%' }} extends "{{ model_inventory.app.code }}/base.html" {{ '%}' }}
 {{ '{%' }} load i18n {{ '%}' }}
 
 {{ '{%' }} block head_title {{ '%}' }}{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }} - {{ '{{' }} block.super {{ '}}' }}{{ '{%' }} endblock head_title {{ '%}' }}
@@ -17,6 +17,6 @@
     {{ '{%' }} endfor {{ '%}' }}
     </ul>
 
-    {{ '{%' }} include "{{ app }}/pagination.html" {{ '%}' }}
+    {{ '{%' }} include "{{ model_inventory.app.code }}/pagination.html" {{ '%}' }}
 </div>
 {% raw %}{% endspaceless %}{% endblock app_content %}{% endraw %}

@@ -9,7 +9,6 @@ from .. import __pkgname__
 
 from .version import version_command
 from .create import create_command
-from .new_create import create_command as new_create_command
 
 
 # Help alias on "-h" argument
@@ -64,4 +63,3 @@ def cli_frontend(ctx, verbose):
 # Attach commands methods to the main grouper
 cli_frontend.add_command(version_command, name="version")
 cli_frontend.add_command(create_command, name="create")
-cli_frontend.add_command(new_create_command, name="new_create")

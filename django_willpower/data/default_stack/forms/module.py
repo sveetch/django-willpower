@@ -11,5 +11,5 @@ class {{ model_inventory.admin_name }}Form(forms.ModelForm):
         fields = "__all__"
         model = {{ model_inventory.name }}
         # widgets = {
-        #     "{{ item }}": autocomplete.TaggitSelect2("{{ app }}:{{ item }}-autocomplete"),
+        #     "{{ item }}": autocomplete.TaggitSelect2("{{ model_inventory.app.code }}:{{ item }}-autocomplete"),
         # }

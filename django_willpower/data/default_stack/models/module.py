@@ -35,7 +35,7 @@ class {{ model_inventory.name }}(models.Model):
         Returns:
             string: An URL.
         """
-        return reverse("{{ model_inventory.app }}:{{ model_inventory.module_name }}-detail", kwargs={"{{ model_inventory.module_name }}_pk": self.id})
+        return reverse("{{ model_inventory.app.code }}:{{ model_inventory.module_name }}-detail", kwargs={"{{ model_inventory.module_name }}_pk": self.id})
 
     def save(self, *args, **kwargs):
 {% for field in model_inventory.modelfields %}{% if field.auto_update %}        self.{{ field.name }} = timezone.now()
