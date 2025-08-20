@@ -186,9 +186,6 @@ def test_load_configuration_resolving(settings, load_json):
     """
     Loader should correctly JSON file for project configuration and set properly the
     appstack and models.
-
-    TODO: Currently fully working only with Python dict, need another test for the
-    whole config from a JSON.
     """
     dual_appstack = settings.configs_path / "appstack_dual_components"
 
@@ -199,8 +196,8 @@ def test_load_configuration_resolving(settings, load_json):
             "some-app": {
                 "name": "Some application",
                 "destination": "some",
-                "template_dir": "default_stack",
-                "declarations": settings.configs_path / "models_basic_blog.json",
+                "template_dir": settings.configs_path / "appstack_single_component",
+                "declarations": str(settings.configs_path / "models_basic_blog.json"),
                 "appstack": (
                     settings.configs_path / "appstack_single_component"
                     / "appstack.json"

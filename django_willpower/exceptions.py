@@ -27,8 +27,8 @@ class ProjectValidationError(DjangowillpowerBaseException):
     pass
 
 
-class ModuleBuilderError(DjangowillpowerBaseException):
+class ProjectBuildError(DjangowillpowerBaseException):
     """
-    Exception to raise from module builder.
+    Exception to raise during a build of a project.
     """
     pass

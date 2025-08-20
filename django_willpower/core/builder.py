@@ -8,7 +8,7 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFo
 
 import django_willpower
 
-from ..exceptions import ModuleBuilderError
+from ..exceptions import ProjectBuildError
 from ..available_components import DEFAULTS as DEFAULT_COMPONENTS
 
 from .appstack import Application, Component, Module

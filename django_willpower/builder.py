@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader, PackageLoader, select_autoesca
 from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFound
 
 import django_willpower
-from .exceptions import ModuleBuilderError
+from .exceptions import ProjectBuildError
 from .datamodels import Field, DataModel
 from .available_components import DEFAULTS as DEFAULT_COMPONENTS
 
@@ -94,7 +94,7 @@ class AppBuilder:
             for item in missing_templates:
                 self.logger.critical(msg.format(item))
 
-            raise ModuleBuilderError("Unable to continue")
+            raise ProjectBuildError("Unable to continue")
 
         return env
 
