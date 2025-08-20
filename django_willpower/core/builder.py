@@ -18,8 +18,6 @@ class ProjectBuilder:
     """
     Project builder.
 
-    TODO: Ongoing porting previous Builder with new appstack and datamodel structure
-
     This will build all components modules of each project application.
 
     * An application have many components (model, form, view, etc..);
@@ -90,9 +88,6 @@ class ProjectBuilder:
         """
         Build component module for a model declaration.
         """
-        #module_pattern = (
-            #self.appdir / Path(component.directory) / module.destination_pattern
-        #)
         self.logger.debug("      └── Module pattern : {}".format(
             module.get_destination()
         ))
@@ -145,13 +140,9 @@ class ProjectBuilder:
         Create a component.
         """
         self.logger.debug("  └── Component: {}".format(component.name))
-        print("self.projectdir:", self.projectdir)
-        print("component.app.destination:", component.app.destination)
-        print("component.directory:", component.directory)
         component_path = (
             self.projectdir / component.app.destination / component.directory
         )
-        print("component_path:", component_path, component_path.exists())
 
         if not component_path.exists():
             msg = "Creating missing directory: {}".format(component_path)
@@ -179,7 +170,8 @@ class ProjectBuilder:
         for appname in names:
             app = self.registry.apps[appname]
             self.logger.debug("- Application: {}".format(app.name))
-            # TODO: Load a new jinja env for each application since each one has its
+
+            # Load a new jinja env for each application since each one has its
             # own template dir
             jinja_env = self.get_jinja_environment(app.template_dir)
 

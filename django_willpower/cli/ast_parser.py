@@ -11,7 +11,8 @@ def argumentparser_init(parser_class):
     parser = parser_class(
         description=(
             "Open a Python module to parse it with 'ast' module and output its parsed "
-            "tree."
+            "tree. This is an experimental tool that currently add no feature to the "
+            "Willpower command."
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )

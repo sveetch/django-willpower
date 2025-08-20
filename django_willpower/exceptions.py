@@ -20,6 +20,13 @@ class AppOperationError(DjangowillpowerBaseException):
     pass
 
 
+class ProjectValidationError(DjangowillpowerBaseException):
+    """
+    Exception to raise from project configuration validation.
+    """
+    pass
+
+
 class ModuleBuilderError(DjangowillpowerBaseException):
     """
     Exception to raise from module builder.
