@@ -3,15 +3,10 @@ import logging
 import sys
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, PackageLoader, select_autoescape
-from jinja2.exceptions import TemplateSyntaxError, UndefinedError, TemplateNotFound
-
-import django_willpower
+from jinja2 import Environment, FileSystemLoader
 
 from ..exceptions import ProjectBuildError
-from ..available_components import DEFAULTS as DEFAULT_COMPONENTS
-
-from .appstack import Application, Component, Module
+from .. import __pkgname__
 
 
 class ProjectBuilder:
@@ -41,7 +36,7 @@ class ProjectBuilder:
 
     """
     def __init__(self, registry, projectdir):
-        self.logger = logging.getLogger(django_willpower.__pkgname__)
+        self.logger = logging.getLogger(__pkgname__)
 
         self.registry = registry
         self.projectdir = projectdir

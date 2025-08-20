@@ -1,7 +1,0 @@
-{{ '{%' }} load i18n {{ '%}' }}
-<ul class="dropdown-menu">
-{% for model_inventory in inventories %}    <li class="dropdown-item {{ '{%' }} if current_model == '{{ model_inventory.name }}' {{ '%}' }} active{{ '{%' }} endif {{ '%}' }}">
-        <a href="{{ '{%' }} url "{{ app }}:{{ model_inventory.module_name }}-index" {{ '%}' }}">{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }}</a>
-    </li>
-{% endfor %}
-</ul>
