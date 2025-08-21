@@ -10,7 +10,7 @@ class {{ model_inventory.view_basename.format('Index') }}(ListView):
     {{ model_inventory.name }} index view.
     """
     model = {{ model_inventory.name }}
-    template_name = "{{ app }}/{{ model_inventory.module_name }}/index.html"
+    template_name = "{{ model_inventory.app.code }}/{{ model_inventory.module_name }}/index.html"
     paginate_by = 42
 
     def get_queryset(self):
@@ -23,7 +23,7 @@ class {{ model_inventory.view_basename.format('Detail') }}(DetailView):
     """
     model = {{ model_inventory.name }}
     pk_url_kwarg = "{{ model_inventory.module_name }}_pk"
-    template_name = "{{ app }}/{{ model_inventory.module_name }}/detail.html"
+    template_name = "{{ model_inventory.app.code }}/{{ model_inventory.module_name }}/detail.html"
     context_object_name = "{{ model_inventory.module_name }}_object"
 
     def get_queryset(self):

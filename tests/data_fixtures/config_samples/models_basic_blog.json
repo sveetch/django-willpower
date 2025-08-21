@@ -16,11 +16,11 @@
     "Article": {
         "fields": {
             "blogs": {
-                "kind": "ManyToManyField",
+                "kind": "ForeignKey",
                 "required": true,
-                "nullable": true,
+                "nullable": false,
                 "default": null,
-                "target": "{app}.Blog",
+                "target": "{appname}.Blog",
                 "related_name": "article",
                 "on_delete": "models.CASCADE"
             },

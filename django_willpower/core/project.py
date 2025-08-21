@@ -222,6 +222,14 @@ class ProjectRegistry:
 
         # Resolve apps values
         for appcode, appdata in payload["apps"].items():
+            # Check app code
+            if not appcode.isidentifier():
+                msg = (
+                    "Application code '{}' is not a valid Python identifier."
+                )
+                raise ProjectValidationError(msg.format(appcode))
+
+            # Check required app level items
             missing = [
                 k
                 for k in self._APP_CONF_REQUIRED_ITEMS
