@@ -12,10 +12,9 @@ from dataclasses import (
     field as dataclasses_field,
     fields as dataclasses_fields
 )
-from pathlib import Path
 from typing import Any
 
-from ..utils.texts import text_to_class_name, text_to_module_name
+from ..utils.texts import text_to_module_name
 
 
 @dataclass
@@ -43,13 +42,13 @@ class Field:
     # Should be required positionnal argument instead if we dont specialize fields
     # in multiple dataclasses
     kind: str = "CharField"
-    modelfield_template: str = "" # TODO Rename to just 'template'
+    modelfield_template: str = ""  # TODO Rename to just 'template'
     default: str = None  # Type should be UNION or ANY to allow for None
     required: bool = False
     nullable: bool = False
     unique: bool = False
-    read_only: bool = False # Not implemented in field templates
-    related_to: str = None  # Type should be UNION or ANY to allow for None
+    read_only: bool = False  # Not implemented in field templates
+    related_to: str = None   # Type should be UNION or ANY to allow for None
     auto_creation: bool = False
     auto_update: bool = False
     min_value: int = None  # Type should be UNION or ANY to allow for None
@@ -74,10 +73,10 @@ class Field:
         Initialize empty positionnal argument values.
         """
         if not self.modelfield_template:
-             self.modelfield_template = "models/fields/{}.py".format(self.kind)
+            self.modelfield_template = "models/fields/{}.py".format(self.kind)
 
         if not self.label:
-             self.label = self.name
+            self.label = self.name
 
         if self.target and self.model and self.model.app:
             self.target = self.target.format(app=self.model.app.code)
@@ -127,7 +126,7 @@ class DataModel:
     modelfields: list[Field] = dataclasses_field(default_factory=list)
     # List of model inline admin classes to include
     admin_inline_models: list[str] = dataclasses_field(default_factory=list)
-    # Define if model should provide an inline admin "{model_name}AdminInline" (NOT IMPLEMENTED YET)
+    # Define if model should provide an inline admin (NOT IMPLEMENTED YET)
     provide_inline: bool = False
     # Default order to define in model and to apply in views
     default_order: list[str] = dataclasses_field(default_factory=list)
@@ -166,34 +165,34 @@ class DataModel:
         assumed to avoid a component.
         """
         if not self.verbose_single:
-             self.verbose_single = self.name.lower()
+            self.verbose_single = self.name.lower()
 
         if not self.verbose_plural:
-             self.verbose_plural = self.verbose_single + "s"
+            self.verbose_plural = self.verbose_single + "s"
 
         if not self.module_name:
-             self.module_name = text_to_module_name(self.name)
+            self.module_name = text_to_module_name(self.name)
 
         if not self.module_name_plural:
-             self.module_name_plural = self.module_name + "s"
+            self.module_name_plural = self.module_name + "s"
 
         if not self.module_filename and self.module_filename is not None:
-             self.module_filename = self.module_name
+            self.module_filename = self.module_name
 
         if not self.admin_name and self.admin_name is not None:
-             self.admin_name = "{}Admin".format(self.name)
+            self.admin_name = "{}Admin".format(self.name)
 
         if not self.admin_form_name and self.admin_form_name is not None:
-             self.admin_form_name = "{}AdminForm".format(self.name)
+            self.admin_form_name = "{}AdminForm".format(self.name)
 
         if not self.factory_name and self.factory_name is not None:
-             self.factory_name = "{}Factory".format(self.name)
+            self.factory_name = "{}Factory".format(self.name)
 
         if not self.form_name and self.form_name is not None:
-             self.form_name = "{}Form".format(self.name)
+            self.form_name = "{}Form".format(self.name)
 
         if not self.view_basename and self.view_basename is not None:
-             self.view_basename = "{}{{}}View".format(self.name)
+            self.view_basename = "{}{{}}View".format(self.name)
 
         # Automatically link fields
         self.set_fields(self.modelfields, from_init=True)

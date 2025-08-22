@@ -307,9 +307,8 @@ class Component:
         """
         if not self.app:
             raise ValueError(
-                "A component without link to application can not use the method '{}'".format(
-                    "get_destination()"
-                )
+                "A component without link to application can not use the method "
+                "'get_destination()'"
             )
 
         return self.app.get_destination() / self.directory
@@ -394,10 +393,10 @@ class Module:
         """
         if not self.component:
             raise ValueError(
-                "A module without link to component can not use the method '{}'".format(
-                    "get_destination()"
-                )
+                "A module without link to component can not use the method "
+                "'get_destination()'"
             )
+
         context = context or {}
 
         if not context:

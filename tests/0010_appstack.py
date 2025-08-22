@@ -118,7 +118,7 @@ def test_appstack_glue(settings):
     # Reversing registered app returns identical config (if default values was defined)
     serialized = json.loads(json.dumps(basic_app.as_dict(), cls=ExtendedJsonEncoder))
     assert serialized == json.loads((
-        settings.fixtures_path / "config_samples/appstack_single_component/appstack.json"
+        settings.configs_path / "appstack_single_component/appstack.json"
     ).read_text())
 
     # Each object can return a path to reach them
@@ -212,7 +212,7 @@ def test_load_models(settings):
     basic_app = Application(name="Blog", code="blog", destination="blog/")
 
     basic_app.load_models(models_payload)
-    #print(json.dumps(basic_app.as_dict(), indent=4))
+    # print(json.dumps(basic_app.as_dict(), indent=4))
 
     assert basic_app.models[0].app.code == basic_app.code
     assert [v.name for v in basic_app.models] == ["Blog", "Article"]
@@ -222,7 +222,8 @@ def test_load_models(settings):
 
 def test_get_destination():
     """
-    TODO
+    Method 'get_destination' from dataclasses should resolve their full destination
+    path when they are correctly linked to their parent.
     """
     # Craft independant modules
     view_module = Module(

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from django_willpower.core import ProjectRegistry, Application, Component, Module
+from django_willpower.core import ProjectRegistry
 from django_willpower.exceptions import ProjectValidationError
 
 
@@ -107,7 +107,7 @@ def test_register_shipped_configs(settings, load_json):
 
     # Application config must include a name, code and destination (shipped
     # configurations are blank)
-    with pytest.raises(ProjectValidationError) as excinfo:
+    with pytest.raises(ProjectValidationError):
         project.add_application(advanced_config, settings.data_path / "default_stack")
 
     # Once correctly filled it just works
@@ -203,8 +203,6 @@ def test_load_configuration_resolving(settings, load_json):
     Loader should correctly JSON file for project configuration and set properly the
     appstack and models.
     """
-    dual_appstack = settings.configs_path / "appstack_dual_components"
-
     project = ProjectRegistry()
 
     project.load_configuration({

@@ -62,7 +62,7 @@ class ProjectRegistry:
             ))
 
         # Validate required application items
-        if(
+        if (
              not appconfig.get("name")
              or not appconfig.get("code")
              or not appconfig.get("destination")
@@ -197,8 +197,6 @@ class ProjectRegistry:
             object: The given payload possibly altered with some special paths resolved
                 as include content.
         """
-        cwd = Path.cwd()
-
         if isinstance(payload, Path):
             if not payload.exists():
                 msg = (
@@ -286,7 +284,5 @@ class ProjectRegistry:
                 destination=appdata["destination"]
             )
             self.add_app_models(appcode, appdata["declarations"])
-
-        #print(json.dumps(payload, indent=4))
 
         return payload

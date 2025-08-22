@@ -2,8 +2,6 @@ import logging
 import os
 from pathlib import Path
 
-import pytest
-
 from django_willpower import __pkgname__
 from django_willpower.core import ProjectRegistry
 from django_willpower.core.builder import ProjectBuilder

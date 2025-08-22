@@ -37,8 +37,6 @@ def create_command(context, basedir, config):
     """
     logger = logging.getLogger(django_willpower.__pkgname__)
 
-    willpower_basepath = Path(django_willpower.__file__).parent
-
     # Display some useful informations from options
     logger.info("🚀 Starting")
     logger.debug("🔧 Base directory: {}".format(basedir.resolve()))
