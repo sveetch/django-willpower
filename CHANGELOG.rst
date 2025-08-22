@@ -3,7 +3,7 @@
 Changelog
 =========
 
-Version 0.2.0 - Unreleased
+Version 0.2.0 - 2025/08/22
 **************************
 
 This is a large refactoring to improve internal code.
