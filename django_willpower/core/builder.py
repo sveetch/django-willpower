@@ -39,7 +39,7 @@ class ProjectBuilder:
         self.logger = logging.getLogger(__pkgname__)
 
         self.registry = registry
-        self.projectdir = projectdir
+        self.projectdir = projectdir.resolve()
 
     def get_jinja_environment(self, template_dir):
         """
@@ -47,13 +47,15 @@ class ProjectBuilder:
         """
         return Environment(loader=FileSystemLoader(template_dir))
 
-    def safe_path_write(self, path, content):
+    def safe_module_write(self, path, content):
         """
         Safely write content to path even if path parents does not exists yet (they will
         be created on need).
         """
         # Ensure path is always inside the project
-        assert path.parent.relative_to(self.projectdir) is not None
+        if not path.is_relative_to(self.projectdir):
+            msg = "Resolved module path is not a child of the project directory: {}"
+            raise ProjectBuildError(msg.format(path))
 
         # Create path parents if needed
         if not path.parent.exists():
@@ -91,9 +93,9 @@ class ProjectBuilder:
 
         if module.once:
             # Will be built once with the full inventories in context
-            module_destination = self.projectdir / module.get_destination(
+            module_destination = (self.projectdir / module.get_destination(
                 self.get_module_path_context(module)
-            )
+            )).resolve()
             msg = "          └── For all models: {}".format(module.template)
             self.logger.debug(msg)
 
@@ -105,16 +107,16 @@ class ProjectBuilder:
                 module=module,
                 inventories=inventories,
             )
-            self.safe_path_write(module_destination, rendered)
+            self.safe_module_write(module_destination, rendered)
         else:
             self.logger.debug("      └── For models:")
             for model in inventories:
-                module_destination = self.projectdir / module.get_destination(
+                module_destination = (self.projectdir / module.get_destination(
                     self.get_module_path_context(
                         module,
                         modelname=model.module_filename
                     )
-                )
+                )).resolve()
                 msg = "          └── {}: {}".format(model.name, module_destination)
                 self.logger.debug(msg)
 
@@ -126,7 +128,7 @@ class ProjectBuilder:
                     module=module,
                     model_inventory=model,
                 )
-                self.safe_path_write(module_destination, rendered)
+                self.safe_module_write(module_destination, rendered)
 
         return
 
@@ -135,14 +137,6 @@ class ProjectBuilder:
         Create a component.
         """
         self.logger.debug("  └── Component: {}".format(component.name))
-        component_path = (
-            self.projectdir / component.app.destination / component.directory
-        )
-
-        if not component_path.exists():
-            msg = "Creating missing directory: {}".format(component_path)
-            self.logger.warning("      └── {}".format(msg))
-            component_path.mkdir(mode=0o755, parents=True)
 
         for module in component.modules:
             self.build_module(jinja_env, module, component.app.models)

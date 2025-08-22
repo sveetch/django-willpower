@@ -14,8 +14,9 @@
         }
     },
     "Article": {
+        "autocompleted_fields": ["blog"],
         "fields": {
-            "blogs": {
+            "blog": {
                 "kind": "ForeignKey",
                 "required": true,
                 "nullable": false,

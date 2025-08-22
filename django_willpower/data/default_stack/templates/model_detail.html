@@ -3,7 +3,7 @@
 
 {{ '{%' }} block head_title {{ '%}' }}{{ '{{' }} {{ model_inventory.module_name }}_object {{ '}}' }} - {{ '{{' }} block.super {{ '}}' }}{{ '{%' }} endblock head_title {{ '%}' }}
 
-{% raw %}{% block app_content %}{% spaceless %}{% endraw %}
+{% raw %}{% block content %}{% spaceless %}{% endraw %}
 <div class="{{ model_inventory.module_name }}-detail">
     <p>
         <a href="{{ '{%' }} url "{{ model_inventory.app.code }}:{{ model_inventory.module_name }}-index" {{ '%}' }}"><small>&lt;&nbsp;{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }}</small></a>
@@ -14,10 +14,10 @@
     <table class="table table-striped">
 {% for field in model_inventory.modelfields %}        <tr class="{{ model_inventory.module_name }}-row">
             <th class="col-lg-4">{{ '{%' }} translate "{{ field.label }}" {{ '%}' }} <br><small class="fw-normal">{{ field.kind }}</small></th>
-            <td class="col-lg-8">{{ '{%' }} include "drant_proto_1/display_value.html" with kind="{{ field.kind }}" value={{ model_inventory.module_name }}_object.{{ field.name }} only {{ '%}' }}</td>
+            <td class="col-lg-8">{{ '{%' }} include "{{ model_inventory.app.code }}/display_value.html" with kind="{{ field.kind }}" value={{ model_inventory.module_name }}_object.{{ field.name }} only {{ '%}' }}</td>
         </tr>
 {% endfor %}
     </table>
 
 </div>
-{% raw %}{% endspaceless %}{% endblock app_content %}{% endraw %}
+{% raw %}{% endspaceless %}{% endblock content %}{% endraw %}

@@ -22,7 +22,21 @@
                     "template": "models/__init__.py",
                     "destination_pattern": "__init__.py",
                     "once": true
+                },
+                {
+                    "name": "Empty migrations placeholder",
+                    "code": "migrations",
+                    "template": "migrations/__init__.py",
+                    "destination_pattern": "../migrations/__init__.py",
+                    "once": true
                 }
+            ]
+        },
+        {
+            "name": "Application migrations",
+            "code": "appmigrations",
+            "directory": "migrations",
+            "modules": [
             ]
         },
         {
@@ -30,10 +44,23 @@
             "code": "appchoices",
             "modules": [
                 {
-                    "name": "Model choices",
+                    "name": "Models choices",
                     "code": "choices",
                     "template": "choices.py",
                     "destination_pattern": "choices.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application settings",
+            "code": "appsettings",
+            "modules": [
+                {
+                    "name": "Models settings",
+                    "code": "settings",
+                    "template": "settings.py",
+                    "destination_pattern": "settings.py",
                     "once": true
                 }
             ]
@@ -124,22 +151,43 @@
             "directory": "templates",
             "modules": [
                 {
-                    "name": "Index template",
+                    "name": "Model index list",
                     "code": "index",
                     "template": "templates/model_index.html",
                     "destination_pattern": "{app}/{model}/index.html"
                 },
                 {
-                    "name": "Detail template",
+                    "name": "Model detail",
                     "code": "detail",
                     "template": "templates/model_detail.html",
                     "destination_pattern": "{app}/{model}/detail.html"
                 },
                 {
-                    "name": "Menu template",
+                    "name": "Base template",
+                    "code": "base_template",
+                    "template": "templates/base.html",
+                    "destination_pattern": "{app}/base.html",
+                    "once": true
+                },
+                {
+                    "name": "Models views menu",
                     "code": "detail",
                     "template": "templates/menu.html",
                     "destination_pattern": "{app}/menu.html",
+                    "once": true
+                },
+                {
+                    "name": "Model detail value render",
+                    "code": "display_value",
+                    "template": "templates/display_value.html",
+                    "destination_pattern": "{app}/display_value.html",
+                    "once": true
+                },
+                {
+                    "name": "Pagination menu",
+                    "code": "pagination",
+                    "template": "templates/pagination.html",
+                    "destination_pattern": "{app}/pagination.html",
                     "once": true
                 }
             ]

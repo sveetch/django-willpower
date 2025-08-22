@@ -3,7 +3,7 @@
 
 {{ '{%' }} block head_title {{ '%}' }}{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }} - {{ '{{' }} block.super {{ '}}' }}{{ '{%' }} endblock head_title {{ '%}' }}
 
-{% raw %}{% block app_content %}{% spaceless %}{% endraw %}
+{% raw %}{% block content %}{% spaceless %}{% endraw %}
 <div class="{{ model_inventory.module_name }}-index">
     <h1>{{ '{%' }} translate "{{ model_inventory.verbose_plural }}" {{ '%}' }}</h1>
 
@@ -19,4 +19,4 @@
 
     {{ '{%' }} include "{{ model_inventory.app.code }}/pagination.html" {{ '%}' }}
 </div>
-{% raw %}{% endspaceless %}{% endblock app_content %}{% endraw %}
+{% raw %}{% endspaceless %}{% endblock content %}{% endraw %}

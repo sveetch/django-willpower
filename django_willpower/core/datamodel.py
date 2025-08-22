@@ -137,6 +137,8 @@ class DataModel:
     readonly_fields: list[str] = dataclasses_field(default_factory=list)
     # List of field prepopulation
     prepopulated_fields: dict = dataclasses_field(default_factory=dict)
+    # List of field autocompleted relation fields
+    autocompleted_fields: list = dataclasses_field(default_factory=list)
     # For the admin only
     list_filter: list[str] = dataclasses_field(default_factory=list)
     # Usually only for admin

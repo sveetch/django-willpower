@@ -1,0 +1,19 @@
+{% raw %}{% load i18n %}{% spaceless %}
+    {% if value %}
+        {% if kind == "ManyToManyField" %}
+            <ul>
+                {% for item in value.all %}
+                    <li>
+                        <a href="{{ item.get_absolute_url }}">{{ item }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% elif kind == "ForeignKey" %}
+            <a href="{{ value.get_absolute_url }}">{{ value }}</a>
+        {% else %}
+            {{ value }}
+        {% endif %}
+    {% else %}
+        <em>{% translate "Empty" %}</em>
+    {% endif %}
+{% endspaceless %}{% endraw %}

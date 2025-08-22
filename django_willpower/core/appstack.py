@@ -364,6 +364,8 @@ class Module:
             unchanged in final destination path.
 
     Keyword Arguments:
+        copy_without_render (bool): When set to true the template is just copied to its
+            destination without any change or render.
         once (bool): If true the module is to be built once for all models. Default
             value is false so the module is build for each model.
         component (Component): Component which this Module is linked to.

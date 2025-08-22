@@ -176,7 +176,23 @@ def test_load_configuration_validation(settings):
         })
 
     expect_msg = (
-        "Application item 'some-app' is missing one or more required items: "
+        "Application code 'some-app' is not a valid Python identifier."
+    )
+    assert expect_msg == str(excinfo.value)
+
+    with pytest.raises(ProjectValidationError) as excinfo:
+        project.load_configuration({
+            "apps": {
+                "some_app": {
+                    "name": "Some application",
+                    "destination": "some",
+                    "appstack": {}
+                }
+            }
+        })
+
+    expect_msg = (
+        "Application item 'some_app' is missing one or more required items: "
         "declarations, template_dir."
     )
     assert expect_msg == str(excinfo.value)
@@ -193,7 +209,7 @@ def test_load_configuration_resolving(settings, load_json):
 
     project.load_configuration({
         "apps": {
-            "some-app": {
+            "some_app": {
                 "name": "Some application",
                 "destination": "some",
                 "template_dir": settings.configs_path / "appstack_single_component",
@@ -206,7 +222,7 @@ def test_load_configuration_resolving(settings, load_json):
         },
     })
 
-    module = project.find("some-app@appviews:init")
+    module = project.find("some_app@appviews:init")
     assert module.component.code == "appviews"
     assert module.code == "init"
     assert module.component.app.get_model("Blog").readonly_fields == ["created"]

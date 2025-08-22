@@ -11,7 +11,7 @@ class {{ model_inventory.view_basename.format('Index') }}(ListView):
     """
     model = {{ model_inventory.name }}
     template_name = "{{ model_inventory.app.code }}/{{ model_inventory.module_name }}/index.html"
-    paginate_by = 42
+    paginate_by = settings.{{ model_inventory.name|upper }}_LIST_PAGINATION
 
     def get_queryset(self):
         return self.model.objects.order_by("id")
