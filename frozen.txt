@@ -1,4 +1,4 @@
-# Frozen requirement versions for 'django-willpower==0.2.0' installation
+# Frozen requirement versions for 'django-willpower==0.2.1rc2' installation
 cookiecutter==2.6.0
 click==8.2.1
 Jinja2==3.1.6

@@ -55,6 +55,7 @@ class WillpowerStringObject(UserString):
 
     def __init__(self, value):
         self.implied_import = None
+        self.is_wpower_syntax = None
         self.parsed_object = self.parse_object(value)
         super().__init__(value)
 
@@ -69,10 +70,16 @@ class WillpowerStringObject(UserString):
         Returns:
             string: Found object part from syntax.
         """
+        self.is_wpower_syntax = False
+
         if isinstance(value, str) and value.startswith(self.PREFIX_MARK):
+            self.is_wpower_syntax = True
+
             # Remove prefix
             content = value[len(self.PREFIX_MARK):].split("/")
 
+            # TODO: Actually it blindly truth slashes dividers and using "w-object:///"
+            # may trick parsing to empty value that should not be allowed
             # Add module part as None if there was none from value
             if len(content[:-1]) == 1:
                 self.implied_import = tuple([None] + content[:-1])
