@@ -25,10 +25,11 @@ coverage.xml
 # Mac Os
 .DS_Store
 
-# Temp files
+# Temp files and built stuff
 *~
 .~lock*
 /data/
+/builds/
 
 # Swap files
 *.sw[po]

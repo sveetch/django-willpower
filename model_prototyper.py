@@ -53,6 +53,16 @@ class ImportCrafterAbstract:
                 ]
             }
 
+        * Name is a list of names, with possible alias (``foo as poo``), multiple names
+          will be divided by a ``,``;
+        * Module is optionnal and involve to import names from this module such as
+          ``from MODULE import NAMES``. Without any module names are just import like
+          this ``import NAMES``;
+        * Level define a relative module position and so if it must be prefixed with
+          dots or not. Module 'foo' with level 0 will results to ``foo`` but with
+          level 2 it would be ``..foo`` just like in ``from ..foo import bar``. This is
+          useless without any Module;
+
         """
 
         if payload.get("module", None):
@@ -193,7 +203,7 @@ class ModelPrototyper(ModulePrototyperMixin):
         },
         # Dummy tests below
         {
-            "names": ["foobar"]
+            "names": ["foobar", ("mizou", "zouzou")],
         },
         {
             "level": 1,

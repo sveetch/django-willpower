@@ -12,9 +12,14 @@ from dataclasses import (
     field as dataclasses_field,
     fields as dataclasses_fields
 )
+from itertools import chain
 from typing import Any
 
 from ..utils.texts import text_to_module_name
+from ..utils.parsing import WillpowerStringObject
+
+
+WOBJECT_ELLIGIBLE_FIELD_ATTRS = ["default", "target"]
 
 
 @dataclass
@@ -25,12 +30,12 @@ class Field:
     There are many arguments but not all have meaning for all modules, some modules
     may use them or not.
 
-    TODO: There may be too many attributes for various things, may be we should just
-    move non essential ones to an attribute 'options' (dict). Beware of mutations.
-
     .. Todo::
-        To be better we would need to make a dataclass for each field, this would be
-        more accurate but would make more work opposed to this generic solution.
+        TODO: To be better we would need to make a dataclass for each field, this would
+        be more accurate but would make more work opposed to this generic solution.
+
+        TODO: There may be too many attributes for various things, may be we should just
+        move non essential ones to an attribute 'options' (dict). Beware of mutations.
 
     Arguments:
         name (string):
@@ -51,11 +56,17 @@ class Field:
     related_to: str = None   # Type should be UNION or ANY to allow for None
     auto_creation: bool = False
     auto_update: bool = False
-    min_value: int = None  # Type should be UNION or ANY to allow for None
-    max_value: int = None  # Type should be UNION or ANY to allow for None
+    # Type should be UNION or ANY to allow for None
+    # NOTE: Imply MinValueValidator for integer kind
+    min_value: int = None
+    # Type should be UNION or ANY to allow for None
+    # NOTE: Imply MaxValueValidator for integer kind
+    max_value: int = None
     # Target value allows for an optional pattern '{app}' to replace with model
     # application name
     # Empty target for a relation should be an error
+    # NOTE: Default behavior is to write a string but it may be a Python object
+    # in some cases like with value 'settings.auth_user_model' or 'get_relation()'
     target: str = ""
     related_name: str = ""
     on_delete: str = ""
@@ -66,6 +77,9 @@ class Field:
     # Commentary just for developer, not used in templates
     comment: str = ""
     # A list of choices
+    # NOTE: Choices is prefered to be defined as callable onto model (and imply
+    # 'default' to do the same) but it is currently implemented through Jinja syntax
+    # in module templates
     choices_list: list[str] = dataclasses_field(default_factory=list)
 
     def __post_init__(self):
@@ -81,6 +95,9 @@ class Field:
         if self.target and self.model and self.model.app:
             self.target = self.target.format(app=self.model.app.code)
 
+        for item in WOBJECT_ELLIGIBLE_FIELD_ATTRS:
+            setattr(self, item, WillpowerStringObject(getattr(self, item)))
+
     def as_dict(self):
         """
         A safe way to convert to a dict without recursion issues.
@@ -93,6 +110,21 @@ class Field:
             for f in dataclasses_fields(self)
             if f.name != "model"
         }
+
+    def get_required_imports(self):
+        """
+        Introspect all elligible attributes to "Willpower object" to find possible
+        involved imports from their value.
+
+        Returns:
+            list: A list of tuple for all explicited required imports from value using
+            the "Willpower object" syntax. The list is unsorted and not distinct.
+        """
+        return [
+            getattr(self, item).implied_import
+            for item in WOBJECT_ELLIGIBLE_FIELD_ATTRS
+            if getattr(self, item) and getattr(self, item).implied_import
+        ]
 
 
 @dataclass
@@ -206,6 +238,29 @@ class DataModel:
 
         if not from_init:
             self.modelfields.extend(fields)
+
+    def get_required_imports(self):
+        """
+        Introspect fields to know if there are values which require some imports.
+
+        Only a few set of attributes are allowed to explicit imports through the
+        syntax of "Willpower object" defined with ``w-object://...`` and internally
+        parsed through a ``WillpowerStringObject`` object.
+
+        Returns:
+            list: A list of distinct tuples for found required imports from field
+            attributes. The list is sorted on a computation of tuple items.
+        """
+        return sorted(
+            set(
+                chain(*[
+                    item.get_required_imports()
+                    for item in self.modelfields
+                    if item.get_required_imports()
+                ])
+            ),
+            key=lambda x: "{}_{}".format(*x)
+        )
 
     def as_dict(self):
         """
