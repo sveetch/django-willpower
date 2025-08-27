@@ -3,6 +3,7 @@ import logging
 from jinja2 import Environment, FileSystemLoader
 
 from ..exceptions import ProjectBuildError
+from ..utils.jinja import wobject_render, str_format
 from .. import __pkgname__
 
 
@@ -42,7 +43,11 @@ class ProjectBuilder:
         """
         Initialize Jinja environment with the right template directory.
         """
-        return Environment(loader=FileSystemLoader(template_dir))
+        env = Environment(loader=FileSystemLoader(template_dir))
+        env.filters["str_format"] = str_format
+        env.filters["wobject_render"] = wobject_render
+
+        return env
 
     def safe_module_write(self, path, content):
         """

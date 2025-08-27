@@ -19,7 +19,7 @@ from ..utils.texts import text_to_module_name
 from ..utils.parsing import WillpowerStringObject
 
 
-WOBJECT_ELLIGIBLE_FIELD_ATTRS = ["default", "target"]
+WOBJECT_ELLIGIBLE_FIELD_ATTRS = ["default", "on_delete", "target"]
 
 
 @dataclass
@@ -93,7 +93,8 @@ class Field:
             self.label = self.name
 
         if self.target and self.model and self.model.app:
-            self.target = self.target.format(app=self.model.app.code)
+            self.target = self.target.format(appname=self.model.app.code)
+            print("self.target:", self.target)
 
         for item in WOBJECT_ELLIGIBLE_FIELD_ATTRS:
             setattr(self, item, WillpowerStringObject(getattr(self, item)))

@@ -1,38 +1,7 @@
 from jinja2 import Environment, DictLoader
 
 from django_willpower.utils.parsing import WillpowerStringObject
-
-
-def wobject_render(value, quote="\""):
-    """
-    Filter to render the resolved object path from a 'WillpowerStringObject' object.
-
-    The specific render behavior here is to quote (and coerced to strin) any value that
-    does not use "Willpower object" syntax and value using the syntax are never quoted
-    so they are correct Python expression in rendered code.
-
-    The quote character used on default is the double quote.
-
-    Sample: ::
-        {{ some_value|wobject_render }}
-
-    Arguments:
-        value (Any): Although this filter is done for a 'WillpowerStringObject', it
-            accept anything else, just only 'WillpowerStringObject' object is rendered
-            specifically.
-
-    Keyword Arguments:
-        quote (string): The character to use to surround value that is not a valid
-            "Willpower object" syntax
-
-    Returns:
-        (Any): Either a string for the resolved object path for a
-        'WillpowerStringObject' else just return the given value unchanded.
-    """
-    if not getattr(value, "is_wpower_syntax", False):
-        return quote + str(value) + quote
-
-    return value.parsed_object
+from django_willpower.utils.jinja import wobject_render
 
 
 def test_filter_wpower_print(caplog, load_json, settings, tmp_path):
