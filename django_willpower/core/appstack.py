@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from ..utils.stackpath import split_stack_path
+from ..utils.texts import text_to_pascal_case, text_to_snake_case
 from .datamodel import Field, DataModel
 
 
@@ -73,6 +74,28 @@ class Application:
                 nothing higher.
         """
         return self.code
+
+    def get_appcode_pascal_case(self):
+        """
+        Return the application code in Pascal case.
+
+        For example it would format ``foo-bar zip`` as ``FooBarZip``.
+
+        Returns:
+            string: Formatted application code.
+        """
+        return text_to_pascal_case(self.code)
+
+    def get_appcode_snake_case(self):
+        """
+        Return the application code in Pascal case.
+
+        For example it would format ``foo-bar zip`` as ``foo_bar_zip``.
+
+        Returns:
+            string: Formatted application code.
+        """
+        return text_to_snake_case(self.code)
 
     def as_dict(self):
         """

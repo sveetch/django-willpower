@@ -1,4 +1,26 @@
 
+def str_format(value, *args, **kwargs):
+    """
+    Filter to perform a string formatting operation.
+
+    This is not to be confused with builtin Jinja filter named ``format`` which perform
+    the printf-style formatting.
+
+    Usage samples: ::
+        {{ "{}bar"|format_operation("foo") }}
+        {{ "{foo}bar"|format_operation(foo="foo") }}
+
+    Arguments:
+        value (string): A string value where to perform formatting operation.
+        *args: Arguments passed to the ``String.format()`` method.
+        **kwargs: Keyword arguments passed to the ``String.format()`` method.
+
+    Returns:
+        (string): Formatted string.
+    """
+    return value.format(*args, **kwargs)
+
+
 def wobject_render(value, quote="\""):
     """
     Filter to render the resolved object path from a 'WillpowerStringObject' object.
@@ -29,25 +51,3 @@ def wobject_render(value, quote="\""):
         return quote + str(value) + quote
 
     return value.parsed_object
-
-
-def str_format(value, *args, **kwargs):
-    """
-    Filter to perform a string formatting operation.
-
-    This is not to be confused with builtin Jinja filter named ``format`` which perform
-    the printf-style formatting.
-
-    Samples: ::
-        {{ "{}bar"|format_operation("foo") }}
-        {{ "{foo}bar"|format_operation(foo="foo") }}
-
-    Arguments:
-        value (string): A string value where to perform formatting operation.
-        *args: Arguments passed to the ``String.format()`` method.
-        **kwargs: Keyword arguments passed to the ``String.format()`` method.
-
-    Returns:
-        (string): Formatted string.
-    """
-    return value.format(*args, **kwargs)

@@ -6,7 +6,7 @@ from django_willpower.utils.parsing import WillpowerStringObject
 
 def test_initialize_datamodel():
     """
-    We except no error on DataModel init if all required arguments are given.
+    We expect no error on DataModel init if all required arguments are given.
     """
     # Without required arguments
     with pytest.raises(TypeError) as excinfo:

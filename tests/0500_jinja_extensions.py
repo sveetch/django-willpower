@@ -1,10 +1,85 @@
 from jinja2 import Environment, DictLoader
 
 from django_willpower.utils.parsing import WillpowerStringObject
-from django_willpower.utils.jinja import wobject_render
+from django_willpower.utils.jinja import str_format, wobject_render
 
 
-def test_filter_wpower_print(caplog, load_json, settings, tmp_path):
+def test_filter_str_format():
+    """
+    The filter 'str_format' should implement 'str.format()' correctly.
+    """
+    loader = DictLoader({
+        "args_only.html": (
+            "{{ value|str_format(foo, bar) }}"
+        ),
+        "args_asterisks.html": (
+            "{{ value|str_format(*payload) }}"
+        ),
+        "kwargs_only.html": (
+            "{{ value|str_format(foo=foo, bar=bar) }}"
+        ),
+        "kwargs_asterisks.html": (
+            "{{ value|str_format(**payload) }}"
+        ),
+        "args_kwargs_mixed.html": (
+            "{{ value|str_format(foo, bar=bar) }}"
+        ),
+        "args_kwargs_asterisks.html": (
+            "{{ value|str_format(*args, **kwargs) }}"
+        ),
+    })
+
+    jinja_env = Environment(loader=loader)
+    jinja_env.filters["str_format"] = str_format
+
+    template = jinja_env.get_template("args_only.html")
+    assert template.render(
+        value="foo={}; bar={}",
+        foo="Foo!",
+        bar="Bar!",
+    ) == "foo=Foo!; bar=Bar!"
+
+    template = jinja_env.get_template("args_asterisks.html")
+    assert template.render(
+        value="foo={}; bar={}",
+        payload=[
+            "Foo!",
+            "Bar!",
+        ],
+    ) == "foo=Foo!; bar=Bar!"
+
+    template = jinja_env.get_template("kwargs_only.html")
+    assert template.render(
+        value="foo={foo}; bar={bar}",
+        foo="Foo!",
+        bar="Bar!",
+    ) == "foo=Foo!; bar=Bar!"
+
+    template = jinja_env.get_template("kwargs_asterisks.html")
+    assert template.render(
+        value="foo={foo}; bar={bar}",
+        payload={
+            "foo": "Foo!",
+            "bar": "Bar!",
+        },
+    ) == "foo=Foo!; bar=Bar!"
+
+    template = jinja_env.get_template("args_kwargs_mixed.html")
+    assert template.render(
+        value="foo={}; bar={bar}",
+        foo="Foo!",
+        bar="Bar!",
+    ) == "foo=Foo!; bar=Bar!"
+
+    template = jinja_env.get_template("args_kwargs_asterisks.html")
+    assert template.render(
+        value="foo={}; bar={bar}",
+        args=["Foo!"],
+        kwargs={"bar": "Bar!"},
+    ) == "foo=Foo!; bar=Bar!"
+
+
+def test_filter_wpower_print():
     """
     The filter 'wobject_render' should properly render a value as expected.
     """

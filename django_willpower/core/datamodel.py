@@ -15,7 +15,7 @@ from dataclasses import (
 from itertools import chain
 from typing import Any
 
-from ..utils.texts import text_to_module_name
+from ..utils.texts import text_to_snake_case
 from ..utils.parsing import WillpowerStringObject
 
 
@@ -204,7 +204,7 @@ class DataModel:
             self.verbose_plural = self.verbose_single + "s"
 
         if not self.module_name:
-            self.module_name = text_to_module_name(self.name)
+            self.module_name = text_to_snake_case(self.name)
 
         if not self.module_name_plural:
             self.module_name_plural = self.module_name + "s"

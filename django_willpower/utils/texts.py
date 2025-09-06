@@ -35,21 +35,24 @@ def normalize_text(value):
     return " ".join(cleaned.split())
 
 
-def text_to_class_name(value):
+def text_to_pascal_case(value):
     """
-    Normalize value to a suitable Python class name.
+    Normalize value to *Pascal case* that is suitable for a Python class name.
 
-    This is a pretty naive implementation that would need improvement.
+    .. Todo::
+        This is a naive implementation that may need improvement.
     """
     cleaned = value.replace("(", "").replace(")", "")
     return normalize_text(cleaned).title().replace(" ", "")
 
 
-def text_to_module_name(value):
+def text_to_snake_case(value):
     """
-    Normalize value to a suitable Python module name (or a variable).
+    Normalize value to *Snake case* that is suitable for a Python module name (or a
+    variable).
 
-    This is a pretty naive implementation that would need improvement.
+    .. Todo::
+        This is a naive implementation that may need improvement.
     """
     cleaned = value.replace("(", "").replace(")", "")
     return normalize_text(cleaned).lower().replace(" ", "_")
