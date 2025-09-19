@@ -11,7 +11,7 @@
 {%- endmacro %}
 
 {% macro attribute_value_coerced_string(attr, value, nullable=false) -%}
-    {%- if value -%}
+    {%- if value and value != "None" -%}
         {{ attr }}="{{ value }}",
     {%- elif nullable == true and value == none -%}
         {{ attr }}=None,
