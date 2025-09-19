@@ -29,3 +29,17 @@
         {{ attr }}=0,
     {%- endif -%}
 {%- endmacro %}
+
+{% macro display_value(modelname, fieldname, kind) %}{% set fieldattrname = modelname + "_object." + fieldname %}{{ '{%' }} if {{ fieldattrname }} {{ '%}' }}{% if kind == "ManyToManyField" %}
+                    <ul>
+                        {{ '{%' }} for item in {{ fieldattrname }}.all {{ '%}' }}
+                            <li>
+                                <a href="{{ '{{' }} item.get_absolute_url {{ '}}' }}">{{ '{{' }} item {{ '}}' }}</a>
+                            </li>
+                        {{ '{%' }} endfor {{ '%}' }}
+                    </ul>{% elif kind == "ForeignKey" %}
+                    <a href="{{ '{{' }} {{ fieldattrname }}.get_absolute_url {{ '}}' }}">{{ '{{' }} {{ fieldattrname }} {{ '}}' }}</a>{% else %}
+                    {{ '{{' }} {{ fieldattrname }} {{ '}}' }}{% endif %}
+                {{ '{%' }} else {{ '%}' }}
+                    <em>{{ '{%' }} translate "Empty" {{ '%}' }}</em>
+                {{ '{%' }} endif {{ '%}' }}{% endmacro %}
