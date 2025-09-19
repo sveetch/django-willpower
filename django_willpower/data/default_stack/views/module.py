@@ -14,7 +14,7 @@ class {{ model_inventory.view_basename.format('Index') }}(ListView):
     paginate_by = settings.{{ model_inventory.name|upper }}_LIST_PAGINATION
 
     def get_queryset(self):
-        return self.model.objects.order_by("id")
+        return self.model.objects.order_by({% if model_inventory.string_representation is string -%}"{{ model_inventory.string_representation }}"{% elif model_inventory.string_representation %}{% for item in model_inventory.string_representation %}"{{ item }}"{% if not loop.last %}, {% endif %}{% endfor %}{% else %}"id"{% endif %})
 
 
 class {{ model_inventory.view_basename.format('Detail') }}(DetailView):
