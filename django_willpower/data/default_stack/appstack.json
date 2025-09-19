@@ -144,6 +144,20 @@
             ]
         },
         {
+            "name": "Application template tags",
+            "code": "apptemplatetags",
+            "directory": "templatetags",
+            "modules": [
+                {
+                    "name": "Pagination tags",
+                    "code": "paginationtags",
+                    "template": "templatetags/paginator_tags.py",
+                    "destination_pattern": "paginator_tags.py",
+                    "once": true
+                }
+            ]
+        },
+        {
             "name": "Application templates",
             "code": "apptemplates",
             "directory": "templates",
