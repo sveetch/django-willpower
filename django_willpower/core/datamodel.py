@@ -170,6 +170,7 @@ class DataModel:
     # List of field prepopulation
     prepopulated_fields: dict = dataclasses_field(default_factory=dict)
     # List of field autocompleted relation fields
+    # NOTE: Target fields must be defined in the search fields of their model
     autocompleted_fields: list = dataclasses_field(default_factory=list)
     # For the admin only
     list_filter: list[str] = dataclasses_field(default_factory=list)

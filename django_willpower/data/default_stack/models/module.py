@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext
 from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -18,6 +18,8 @@ class {{ model_inventory.name }}(models.Model):
 {% endfor %}    """
 {% for field in model_inventory.modelfields %}{% include field.modelfield_template %}
 {% endfor %}
+    {% if model_inventory.string_representation %}TITLE_FIELD_DISPLAY = {% if model_inventory.string_representation is string -%}"{{ model_inventory.string_representation }}"{% else %}{{ model_inventory.string_representation|tojson }}{%- endif %}{%- endif %}
+
     class Meta:
         verbose_name = _("{{ model_inventory.name }}")
         verbose_name_plural = _("{{ model_inventory.name }}s"){% if model_inventory.default_order %}
@@ -25,8 +27,11 @@ class {{ model_inventory.name }}(models.Model):
 {% endif %}
     {% if model_inventory.string_representation %}
     def __str__(self):
+        return self.get_display_title() or gettext("Empty")
+
+    def get_display_title(self):
         return {% if model_inventory.string_representation is string -%}
-            self.{{ model_inventory.string_representation }}{% else %}" ".join([{% for item in model_inventory.string_representation %}self.{{ item }}{% if not loop.last %}, {% endif %}{% endfor %}])
+            getattr(self, self.TITLE_FIELD_DISPLAY){% else %}" ".join([getattr(self, k) for k in self.TITLE_FIELD_DISPLAY])
         {%- endif %}
     {% endif %}
     def get_absolute_url(self):

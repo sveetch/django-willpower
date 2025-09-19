@@ -242,7 +242,7 @@ class ProjectRegistry:
                     ", ".join(missing)
                 ))
 
-            # TODO: A string may be accepted also and turned to a Path (because JSON
+            # A string is accepted but converted to a Path (because JSON
             # does not allow for Path type)
             if isinstance(appdata["declarations"], str):
                 appdata["declarations"] = Path(appdata["declarations"])
