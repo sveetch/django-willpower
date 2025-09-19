@@ -81,6 +81,8 @@ class Field:
     # 'default' to do the same) but it is currently implemented through Jinja syntax
     # in module templates
     choices_list: list[str] = dataclasses_field(default_factory=list)
+    # Only useful used by a foreignkey, only support definition with a dictionnary
+    limit_choices_to: dict = None
 
     def __post_init__(self):
         """
@@ -243,9 +245,9 @@ class DataModel:
 
     def get_required_imports(self):
         """
-        Introspect fields to know if there are values which require some imports.
+        Introspect fields to know if they have values which require some imports.
 
-        Only a few set of attributes are allowed to explicit imports through the
+        Only a few set of attributes are allowed to define explicit imports through the
         syntax of "Willpower object" defined with ``w-object://...`` and internally
         parsed through a ``WillpowerStringObject`` object.
 

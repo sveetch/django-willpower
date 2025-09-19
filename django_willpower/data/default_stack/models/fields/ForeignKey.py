@@ -8,5 +8,6 @@
         blank=False,{% else %}
         blank=True,
         null=True,
-        default=None,{% endif %}
+        default=None,{% endif %}{% if field.limit_choices_to %}
+        limit_choices_to={{ field.limit_choices_to }},{% endif %}
     )
