@@ -6,6 +6,7 @@
         related_name="{{ field.related_name }}",{% endif %}{% if field.unique %}
         unique=True,{% endif %}{% if field.required %}
         blank=False,{% else %}
+        blank=True,
         null=True,
         default=None,{% endif %}
     )
