@@ -25,7 +25,7 @@ def wobject_render(value, quote="\""):
     """
     Filter to render the resolved object path from a 'WillpowerStringObject' object.
 
-    The specific render behavior here is to quote (and coerced to strin) any value that
+    The specific render behavior here is to quote (and coerced to string) any value that
     does not use "Willpower object" syntax and value using the syntax are never quoted
     so they are correct Python expression in rendered code.
 

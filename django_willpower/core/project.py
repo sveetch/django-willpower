@@ -286,3 +286,11 @@ class ProjectRegistry:
             self.add_app_models(appcode, appdata["declarations"])
 
         return payload
+
+    def post_process(self):
+        """
+        TODO: A method to be called once all applications have been registered so it
+        can make post processing on model and their fields, like resolving some
+        values.
+        """
+        pass

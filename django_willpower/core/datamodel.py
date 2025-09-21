@@ -190,10 +190,13 @@ class DataModel:
     # Is a pattern of a pattern, it must include a '{{}}' that will be replaced with
     # the component name
     view_basename: str = ""
-    # Model attribute to use as string representation ('__str__')
+    # Model attribute to use as the string representation ('__str__')
     # Can be a string for a Model attribute to use or a list for model attributes to
     # join with a whitespace
     string_representation: str = ""
+    # Related model to list in detail view. The targeted model must have a relation
+    # field to this one.
+    related_model: Any = None
 
     def __post_init__(self):
         """

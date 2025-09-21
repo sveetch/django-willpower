@@ -21,4 +21,15 @@
 {% endfor %}    </table>
 
 </div>
+
+{% if model_inventory.related_model %}<h2>{{ '{%' }} translate "{{ model_inventory.related_model }}" {{ '%}' }} ({{ '{{' }} paginator.count {{ '}}' }})</h2>
+{% raw %}<div class="related-objects list-group">
+    {% for relation in object_list %}
+        <a class="list-group-item list-group-item-action" href="{{ relation.get_absolute_url }}">{{ relation }}</a>
+    {% empty %}
+        <a class="empty list-group-item list-group-item-action disabled" href="#">{% translate "No relation yet." %}</li>
+    {% endfor %}
+</div>{% endraw %}
+
+{{ '{%' }} include "{{ model_inventory.app.code }}/pagination.html" {{ '%}' }}{% endif %}
 {% raw %}{% endspaceless %}{% endblock content %}{% endraw %}
