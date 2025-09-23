@@ -6,6 +6,84 @@
     "models": [],
     "components": [
         {
+            "name": "Application init",
+            "code": "appinit",
+            "modules": [
+                {
+                    "name": "init",
+                    "code": "init",
+                    "template": "__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application DjangoApp",
+            "code": "appdjangoapp",
+            "modules": [
+                {
+                    "name": "DjangoApp module",
+                    "code": "choices",
+                    "template": "apps.py",
+                    "destination_pattern": "apps.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Django configuration",
+            "code": "appdjangoconfig",
+            "modules": [
+                {
+                    "name": "Django configuration module",
+                    "code": "config",
+                    "template": "django_configuration.py",
+                    "destination_pattern": "django_configuration.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Django Haystack",
+            "code": "apphaystackfields",
+            "modules": [
+                {
+                    "name": "Haystack fields",
+                    "code": "fields",
+                    "template": "search_fields.py",
+                    "destination_pattern": "search_fields.py",
+                    "once": true
+                },
+                {
+                    "name": "Model indexes",
+                    "code": "indexes",
+                    "template": "search_indexes.py",
+                    "destination_pattern": "search_indexes.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application migrations",
+            "code": "appmigrations",
+            "directory": "migrations",
+            "modules": []
+        },
+        {
+            "name": "Application settings",
+            "code": "appsettings",
+            "modules": [
+                {
+                    "name": "Models settings",
+                    "code": "settings",
+                    "template": "settings.py",
+                    "destination_pattern": "settings.py",
+                    "once": true
+                }
+            ]
+        },
+        {
             "name": "Application admins",
             "code": "appadmins",
             "directory": "admin",
@@ -39,45 +117,6 @@
             ]
         },
         {
-            "name": "Application DjangoApp",
-            "code": "appdjangoapp",
-            "modules": [
-                {
-                    "name": "DjangoApp module",
-                    "code": "choices",
-                    "template": "apps.py",
-                    "destination_pattern": "apps.py",
-                    "once": true
-                }
-            ]
-        },
-        {
-            "name": "Application Django configuration",
-            "code": "appdjangoconfig",
-            "modules": [
-                {
-                    "name": "Django configuration module",
-                    "code": "config",
-                    "template": "django_configuration.py",
-                    "destination_pattern": "django_configuration.py",
-                    "once": true
-                }
-            ]
-        },
-        {
-            "name": "Application init",
-            "code": "appinit",
-            "modules": [
-                {
-                    "name": "init",
-                    "code": "init",
-                    "template": "__init__.py",
-                    "destination_pattern": "__init__.py",
-                    "once": true
-                }
-            ]
-        },
-        {
             "name": "Application forms",
             "code": "appforms",
             "directory": "forms",
@@ -93,6 +132,48 @@
                     "code": "init",
                     "template": "forms/__init__.py",
                     "destination_pattern": "__init__.py",
+                    "once": true
+                },
+                {
+                    "name": "Search forms",
+                    "code": "search",
+                    "template": "forms/search.py",
+                    "destination_pattern": "search.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application forms crispies",
+            "code": "appcripies",
+            "directory": "form_helpers",
+            "modules": [
+                {
+                    "name": "Crispies init",
+                    "code": "init",
+                    "template": "form_helpers/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                },
+                {
+                    "name": "Crispies default class",
+                    "code": "default",
+                    "template": "form_helpers/default.py",
+                    "destination_pattern": "default.py",
+                    "once": true
+                },
+                {
+                    "name": "Crispies layout objects",
+                    "code": "layoutobjects",
+                    "template": "form_helpers/layout_objects.py",
+                    "destination_pattern": "layout_objects.py",
+                    "once": true
+                },
+                {
+                    "name": "Crispies search form",
+                    "code": "search",
+                    "template": "form_helpers/search.py",
+                    "destination_pattern": "search.py",
                     "once": true
                 }
             ]
@@ -120,25 +201,6 @@
                     "code": "migrations",
                     "template": "migrations/__init__.py",
                     "destination_pattern": "../migrations/__init__.py",
-                    "once": true
-                }
-            ]
-        },
-        {
-            "name": "Application migrations",
-            "code": "appmigrations",
-            "directory": "migrations",
-            "modules": []
-        },
-        {
-            "name": "Application settings",
-            "code": "appsettings",
-            "modules": [
-                {
-                    "name": "Models settings",
-                    "code": "settings",
-                    "template": "settings.py",
-                    "destination_pattern": "settings.py",
                     "once": true
                 }
             ]
@@ -175,6 +237,12 @@
                     "destination_pattern": "{app}/{model}/detail.html"
                 },
                 {
+                    "name": "Haystack search field index for model",
+                    "code": "searchindex",
+                    "template": "templates/search_field_index.txt",
+                    "destination_pattern": "{app}/{model}/search_field_index.txt"
+                },
+                {
                     "name": "Base template",
                     "code": "base_template",
                     "template": "templates/base.html",
@@ -201,6 +269,20 @@
                     "template": "templates/pagination.html",
                     "destination_pattern": "{app}/pagination.html",
                     "once": true
+                },
+                {
+                    "name": "Crispies listgroup field",
+                    "code": "listgroupfield",
+                    "template": "templates/listgroupcheckboxes.html",
+                    "destination_pattern": "{app}/listgroupcheckboxes.html",
+                    "once": true
+                },
+                {
+                    "name": "Global search",
+                    "code": "globalsearch",
+                    "template": "templates/search_results.html",
+                    "destination_pattern": "{app}/search/results.html",
+                    "once": true
                 }
             ]
         },
@@ -214,6 +296,13 @@
                     "code": "module",
                     "template": "urls/module.py",
                     "destination_pattern": "{model}.py"
+                },
+                {
+                    "name": "Search URLs",
+                    "code": "search",
+                    "template": "urls/search.py",
+                    "destination_pattern": "search.py",
+                    "once": true
                 },
                 {
                     "name": "URLs init",
@@ -236,9 +325,37 @@
                     "destination_pattern": "{model}.py"
                 },
                 {
+                    "name": "Search view",
+                    "code": "search",
+                    "template": "views/search.py",
+                    "destination_pattern": "search.py",
+                    "once": true
+                },
+                {
                     "name": "Views init",
                     "code": "init",
                     "template": "views/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application utilities",
+            "code": "apputils",
+            "directory": "utils",
+            "modules": [
+                {
+                    "name": "Text utilities",
+                    "code": "text",
+                    "template": "utils/text.py",
+                    "destination_pattern": "text.py",
+                    "once": true
+                },
+                {
+                    "name": "Init",
+                    "code": "init",
+                    "template": "utils/__init__.py",
                     "destination_pattern": "__init__.py",
                     "once": true
                 }

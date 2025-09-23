@@ -1,0 +1,2 @@
+{% for field in model_inventory.search_fields %}{{ '{{' }} object.{{ field }} {{ '}}' }}
+{% endfor %}

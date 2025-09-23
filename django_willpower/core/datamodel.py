@@ -196,6 +196,8 @@ class DataModel:
     string_representation: str = ""
     # Related model to list in detail view. The targeted model must have a relation
     # field to this one.
+    # NOTE: This is actually only a string for the model class name and its only for
+    # an internal model. It should be resolved to the corresponding DataModel instead.
     related_model: Any = None
 
     def __post_init__(self):
