@@ -15,7 +15,7 @@
 {% for field in model_inventory.modelfields %}        <tr class="{{ model_inventory.module_name }}-row">
             <th class="col-lg-4">{{ '{%' }} translate "{{ field.label }}" {{ '%}' }}<br><small class="fw-normal">{{ field.kind }}</small></th>
             <td class="col-lg-8">
-                {{ utils.display_value(model_inventory.module_name, field.name, field.kind) }}
+                {% if field.name == "heurist_id" %}<a href="https://heurist.huma-num.fr/h6-alpha/hclient/framecontent/recordEdit.php?db=DRANT&amp;recID={{ '{{' }} {{ model_inventory.module_name }}_object.{{ field.name }} {{ '}}' }}&amp;fmt=edit" target="_blank">Éditer sur Heurist</a>{% else %}{{ utils.display_value(model_inventory.module_name, field.name, field.kind) }}{% endif %}
             </td>
         </tr>
 {% endfor %}    </table>
