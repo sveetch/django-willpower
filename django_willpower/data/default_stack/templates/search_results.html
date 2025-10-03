@@ -10,7 +10,7 @@
         <hr>
 
         {% if query %}
-            <h3 class="h4 mb-4">{% translate "Results" %}</h3>
+            <h3 class="h4 mb-4">{% translate "Results" %} ({{ paginator.count }})</h3>
 
             {% with results=page_obj.object_list %}
                 {% if results %}
