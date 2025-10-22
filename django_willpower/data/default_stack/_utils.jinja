@@ -30,6 +30,36 @@
     {%- endif -%}
 {%- endmacro %}
 
+{% macro test_value(field) -%}
+    {%- if field.kind == 'DateField' -%}
+        timezone.now().date()
+    {%- elif field.kind == 'TimeField' -%}
+        timezone.now().time()
+    {%- elif field.kind == 'DateTimeField' -%}
+        timezone.now()
+    {%- elif field.kind == 'BooleanField' -%}
+        True
+    {%- elif field.kind == 'ChoiceField' -%}
+        get_{{ field.name }}_default()
+    {%- elif field.kind in ['FileField', 'ImageField'] -%}
+        ""
+    {%- elif field.kind in ['CharField', 'TextField'] -%}
+        "Foo"
+    {%- elif field.kind == 'EmailField' -%}
+        "bar@foo.com"
+    {%- elif field.kind == 'SlugField' -%}
+        "foo"
+    {%- elif field.kind == 'ForeignKey' -%}
+        None
+    {%- elif field.kind == 'ManyToManyField' -%}
+        None
+    {%- elif field.kind in ['IntegerField', 'PositiveIntegerField'] -%}
+        42
+    {%- else -%}
+        ""
+    {%- endif -%}
+{%- endmacro %}
+
 {% macro display_value(modelname, fieldname, kind) %}{% set fieldattrname = modelname + "_object." + fieldname %}{{ '{%' }} if {{ fieldattrname }} {{ '%}' }}{% if kind == "ManyToManyField" %}
                     <ul>
                         {{ '{%' }} for item in {{ fieldattrname }}.all {{ '%}' }}
@@ -43,3 +73,4 @@
                 {{ '{%' }} else {{ '%}' }}
                     <em>{{ '{%' }} translate "Empty" {{ '%}' }}</em>
                 {{ '{%' }} endif {{ '%}' }}{% endmacro %}
+

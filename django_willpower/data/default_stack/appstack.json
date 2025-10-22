@@ -117,6 +117,26 @@
             ]
         },
         {
+            "name": "Application factories",
+            "code": "appfactory",
+            "directory": "factories",
+            "modules": [
+                {
+                    "name": "Factory module",
+                    "code": "module",
+                    "template": "factories/module.py",
+                    "destination_pattern": "{model}.py"
+                },
+                {
+                    "name": "Factory init",
+                    "code": "init",
+                    "template": "factories/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
             "name": "Application forms",
             "code": "appforms",
             "directory": "forms",
@@ -206,20 +226,6 @@
             ]
         },
         {
-            "name": "Application template tags",
-            "code": "apptemplatetags",
-            "directory": "templatetags",
-            "modules": [
-                {
-                    "name": "Pagination tags",
-                    "code": "paginationtags",
-                    "template": "templatetags/paginator_tags.py",
-                    "destination_pattern": "paginator_tags.py",
-                    "once": true
-                }
-            ]
-        },
-        {
             "name": "Application templates",
             "code": "apptemplates",
             "directory": "templates",
@@ -287,6 +293,47 @@
             ]
         },
         {
+            "name": "Application template tags",
+            "code": "apptemplatetags",
+            "directory": "templatetags",
+            "modules": [
+                {
+                    "name": "Pagination tags",
+                    "code": "paginationtags",
+                    "template": "templatetags/paginator_tags.py",
+                    "destination_pattern": "paginator_tags.py",
+                    "once": true
+                }
+            ]
+        },
+        {
+            "name": "Application tests",
+            "code": "apptests",
+            "directory": "tests",
+            "modules": [
+                {
+                    "name": "Model tests",
+                    "code": "models",
+                    "template": "tests/models.py",
+                    "destination_pattern": "1001_{model}.py"
+                },
+                {
+                    "name": "Tests init",
+                    "code": "init",
+                    "template": "tests/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                },
+                {
+                    "name": "Pytest config",
+                    "code": "conftest",
+                    "template": "tests/conftest.py",
+                    "destination_pattern": "conftest.py",
+                    "once": true
+                }
+            ]
+        },
+        {
             "name": "Application URLs",
             "code": "appurls",
             "directory": "urls",
@@ -314,6 +361,27 @@
             ]
         },
         {
+            "name": "Application utilities",
+            "code": "apputils",
+            "directory": "utils",
+            "modules": [
+                {
+                    "name": "Text utilities",
+                    "code": "text",
+                    "template": "utils/text.py",
+                    "destination_pattern": "text.py",
+                    "once": true
+                },
+                {
+                    "name": "Init",
+                    "code": "init",
+                    "template": "utils/__init__.py",
+                    "destination_pattern": "__init__.py",
+                    "once": true
+                }
+            ]
+        },
+        {
             "name": "Application views",
             "code": "appviews",
             "directory": "views",
@@ -335,27 +403,6 @@
                     "name": "Views init",
                     "code": "init",
                     "template": "views/__init__.py",
-                    "destination_pattern": "__init__.py",
-                    "once": true
-                }
-            ]
-        },
-        {
-            "name": "Application utilities",
-            "code": "apputils",
-            "directory": "utils",
-            "modules": [
-                {
-                    "name": "Text utilities",
-                    "code": "text",
-                    "template": "utils/text.py",
-                    "destination_pattern": "text.py",
-                    "once": true
-                },
-                {
-                    "name": "Init",
-                    "code": "init",
-                    "template": "utils/__init__.py",
                     "destination_pattern": "__init__.py",
                     "once": true
                 }

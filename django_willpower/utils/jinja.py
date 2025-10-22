@@ -7,8 +7,8 @@ def str_format(value, *args, **kwargs):
     the printf-style formatting.
 
     Usage samples: ::
-        {{ "{}bar"|format_operation("foo") }}
-        {{ "{foo}bar"|format_operation(foo="foo") }}
+        {{ "{}bar"|str_format("foo") }}
+        {{ "{foo}bar"|str_format(foo="foo") }}
 
     Arguments:
         value (string): A string value where to perform formatting operation.

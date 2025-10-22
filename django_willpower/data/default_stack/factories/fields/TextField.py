@@ -1,0 +1,1 @@
+    {{ field.name }} = factory.Sequence(lambda n: "{{ field.label|title }} %d" % n)

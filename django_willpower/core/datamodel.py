@@ -96,7 +96,6 @@ class Field:
 
         if self.target and self.model and self.model.app:
             self.target = self.target.format(appname=self.model.app.code)
-            print("self.target:", self.target)
 
         for item in WOBJECT_ELLIGIBLE_FIELD_ATTRS:
             setattr(self, item, WillpowerStringObject(getattr(self, item)))

@@ -1,0 +1,1 @@
+    {{ field.name }} = factory.Faker("pyint", min_value={% if field.min_value %}{{ field.min_value }}{% else %}1{% endif %}, max_value={% if field.max_value %}{{ field.max_value }}{% else %}999999{% endif %})

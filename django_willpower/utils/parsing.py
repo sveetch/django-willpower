@@ -78,7 +78,7 @@ class WillpowerStringObject(UserString):
             # Remove prefix
             content = value[len(self.PREFIX_MARK):].split("/")
 
-            # TODO: Actually it blindly truth slashes dividers so using "w-object:///"
+            # TODO: Actually it blindly trusts slash dividers so using "w-object:///"
             # may trick parsing to empty value that should not be allowed. A proper
             # regex should be better.
             # Add module part as None if there was none from value

@@ -1,0 +1,1 @@
+    {{ field.name }} = factory.SubFactory({{ field.target|wobject_render|str_format(appname=model_inventory.app.code) }})
