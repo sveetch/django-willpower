@@ -128,6 +128,13 @@
                     "destination_pattern": "{model}.py"
                 },
                 {
+                    "name": "Django user factory",
+                    "code": "user",
+                    "template": "factories/user.py",
+                    "destination_pattern": "user.py",
+                    "once": true
+                },
+                {
                     "name": "Factory init",
                     "code": "init",
                     "template": "factories/__init__.py",
@@ -315,7 +322,7 @@
                     "name": "Model tests",
                     "code": "models",
                     "template": "tests/models.py",
-                    "destination_pattern": "1001_{model}.py"
+                    "destination_pattern": "10{position}_{model}.py"
                 },
                 {
                     "name": "Tests init",

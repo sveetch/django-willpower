@@ -1,8 +1,4 @@
-    {{ field.name }} = None{#
--- Currently disabled because we are unable to correctly resolve the model factory path
--- from the target that is especially done for model resolution but does not provide
--- the targeted model dataclass to get its name without wobject path or simple path
-    @factory.post_generation
+{% import '_utils.jinja' as utils %}    @factory.post_generation
     def fill_{{ field.name }}(self, create, extracted, **kwargs):
         """
         Add {{ field.name }} objects.
@@ -19,11 +15,11 @@
 
         # Create a new random object
         if extracted is True:
-            objects = [{{ field.target|wobject_render(quote="")|str_format(appname=model_inventory.app.code) }}Factory()]
+            objects = [{{ utils.get_subfactory_modulename(app.code, field.target.parsed_object) }}()]
         # Take given objects
         else:
             objects = extracted
 
         # Add objects
         for item in objects:
-            self.objects.add(item)#}
+            self.objects.add(item)

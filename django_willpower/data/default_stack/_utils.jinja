@@ -30,7 +30,7 @@
     {%- endif -%}
 {%- endmacro %}
 
-{% macro test_value(field) -%}
+{% macro test_dummy_value(field) -%}
     {%- if field.kind == 'DateField' -%}
         timezone.now().date()
     {%- elif field.kind == 'TimeField' -%}
@@ -57,6 +57,30 @@
         42
     {%- else -%}
         ""
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro get_model_representation_string(field) -%}
+    {%- if field is string -%}
+        {{ field }}
+    {%- else -%}
+        {{ field[0] }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro get_subfactory_modulepath(app, target) -%}
+    {%- if target == "settings.AUTH_USER_MODEL" -%}
+        .user
+    {%- else -%}
+        .{{ target.split(".") | last | lower }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro get_subfactory_modulename(app, target) -%}
+    {%- if target == "settings.AUTH_USER_MODEL" -%}
+        UserFactory
+    {%- else -%}
+        {{ target.split(".") | last }}Factory
     {%- endif -%}
 {%- endmacro %}
 

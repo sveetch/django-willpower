@@ -6,7 +6,10 @@ Changelog
 Development
 ***********
 
-Todo.
+* Fixed pagination template;
+* Added 'factories' component;
+* Added 'tests' component with models;
+* Updated search result to inclut result counter;
 
 
 Version 0.2.1 - 2025/09/23

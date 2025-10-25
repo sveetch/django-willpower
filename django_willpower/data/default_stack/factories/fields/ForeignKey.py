@@ -1,1 +1,1 @@
-    {{ field.name }} = factory.SubFactory({{ field.target|wobject_render|str_format(appname=model_inventory.app.code) }})
+{% import '_utils.jinja' as utils %}    {{ field.name }} = factory.SubFactory({{ utils.get_subfactory_modulename(app.code, field.target.parsed_object) }})

@@ -81,3 +81,4 @@ def tests_settings():
                 print(tests_settings.format("Root: {ROOT}"))
     """
     return FixturesSettingsTestMixin()
+

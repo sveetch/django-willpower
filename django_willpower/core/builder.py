@@ -61,21 +61,18 @@ class ProjectBuilder:
 
         # Create path parents if needed
         if not path.parent.exists():
-            msg = "          └── Created path parents: {}".format(path.parent)
-            self.logger.debug(msg)
             path.parent.mkdir(mode=0o755, parents=True)
 
-        msg = "              Written to: {}".format(path)
-        self.logger.debug(msg)
         path.write_text(content)
 
         return path
 
-    def get_module_path_context(self, module, modelname=None):
+    def get_module_path_context(self, module, position=1, modelname=None):
         context = {
             "app": module.component.app.code,
             "component": module.component.code,
             "module": module.code,
+            "position": position,
         }
 
         if modelname:
@@ -109,17 +106,19 @@ class ProjectBuilder:
                 module=module,
                 inventories=inventories,
             )
-            self.safe_module_write(module_destination, rendered)
+            written = self.safe_module_write(module_destination, rendered)
         else:
-            self.logger.debug("      └── For models:")
-            for model in inventories:
+            self.logger.debug("          └── For models:")
+            digits = len(str(len(inventories)))
+            for i, model in enumerate(inventories, start=1):
                 module_destination = (self.projectdir / module.get_destination(
                     self.get_module_path_context(
                         module,
+                        position=str(i).zfill(digits),
                         modelname=model.module_filename
                     )
                 )).resolve()
-                msg = "          └── {}: {}".format(model.name, module_destination)
+                msg = "              └── {}: {}".format(model.name, module_destination)
                 self.logger.debug(msg)
 
                 # Render module template with context and write it to the FS
@@ -138,7 +137,7 @@ class ProjectBuilder:
         """
         Create a component.
         """
-        self.logger.debug("  └── Component: {}".format(component.name))
+        self.logger.debug("   📦️ Component: {}".format(component.name))
 
         for module in component.modules:
             self.build_module(jinja_env, module, component.app.models)
@@ -156,11 +155,11 @@ class ProjectBuilder:
             something: something
         """
         names = names or self.registry.apps.keys()
-        self.logger.debug("Processing into: {}".format(self.projectdir))
+        self.logger.debug("📝 Processing into: {}".format(self.projectdir))
 
         for appname in names:
             app = self.registry.apps[appname]
-            self.logger.debug("- Application: {}".format(app.name))
+            self.logger.debug("🏗️Working on application: {}".format(app.name))
 
             # Load a new jinja env for each application since each one has its
             # own template dir

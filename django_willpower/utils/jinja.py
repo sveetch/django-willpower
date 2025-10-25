@@ -4,7 +4,7 @@ def str_format(value, *args, **kwargs):
     Filter to perform a string formatting operation.
 
     This is not to be confused with builtin Jinja filter named ``format`` which perform
-    the printf-style formatting.
+    the printf-style formatting (with ``%s``).
 
     Usage samples: ::
         {{ "{}bar"|str_format("foo") }}

@@ -1,8 +1,10 @@
 {% for model_inventory in inventories %}from .{{ model_inventory.module_name }} import {{ model_inventory.name }}Factory
-{% endfor %}
+{% endfor %}from .user import UserFactory
+
 
 __all__ = [
 {% for model_inventory in inventories %}    "{{ model_inventory.name }}Factory",{% if not loop.last %}
 {% endif %}{%- endfor %}
+    "UserFactory",
 ]
 

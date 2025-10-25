@@ -4,10 +4,9 @@ from django.utils.translation import gettext_lazy as _, gettext
 from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-{% for field in model_inventory.modelfields %}{% if field.choices_list %}
-from ..choices import get_{{ field.name }}_choices, get_{{ field.name }}_default{% endif %}{% endfor %}
-
+{% for field in model_inventory.get_choices_fields() %}{% if loop.first %}
+{% endif %}from ..choices import get_{{ field.name }}_choices, get_{{ field.name }}_default
+{% endfor %}
 
 class {{ model_inventory.name }}(models.Model):
     """
@@ -24,8 +23,7 @@ class {{ model_inventory.name }}(models.Model):
         verbose_name = _("{{ model_inventory.name }}")
         verbose_name_plural = _("{{ model_inventory.name }}s"){% if model_inventory.default_order %}
         ordering = [{% for fieldname in model_inventory.default_order %}"{{ fieldname }}",{% endfor %}]
-{% endif %}
-    {% if model_inventory.string_representation %}
+{% endif %}{% if model_inventory.string_representation %}
     def __str__(self):
         return self.get_display_title() or gettext("Empty")
 
@@ -41,7 +39,10 @@ class {{ model_inventory.name }}(models.Model):
         Returns:
             string: An URL.
         """
-        return reverse("{{ model_inventory.app.code }}:{{ model_inventory.module_name }}-detail", kwargs={"{{ model_inventory.module_name }}_pk": self.id})
+        return reverse(
+            "{{ model_inventory.app.code }}:{{ model_inventory.module_name }}-detail",
+            kwargs={"{{ model_inventory.module_name }}_pk": self.id}
+        )
 
     def save(self, *args, **kwargs):
 {% for field in model_inventory.modelfields %}{% if field.auto_update %}        self.{{ field.name }} = timezone.now()

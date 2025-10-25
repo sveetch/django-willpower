@@ -19,6 +19,7 @@ from ..utils.texts import text_to_snake_case
 from ..utils.parsing import WillpowerStringObject
 
 
+# Define Field attributes that are elligible to include a WillpowerStringObject object
 WOBJECT_ELLIGIBLE_FIELD_ATTRS = ["default", "on_delete", "target"]
 
 
@@ -138,7 +139,7 @@ class DataModel:
 
     TODO: There may be too many attribute for various things, may be we should just
     move non essential ones to an attribute 'options' (dict) or 'admin_options',
-    'view_options', etc.. Beware of mutations.
+    'view_options', etc.. but carefully to avoid mutations.
 
     Arguments:
         name (string): The model name. Commonly it should start with an uppercase
@@ -246,6 +247,45 @@ class DataModel:
 
         if not from_init:
             self.modelfields.extend(fields)
+
+    def get_choices_fields(self):
+        """
+        Return a list of model fields which define a choice list.
+
+        Returns:
+            list: A list of Field objects.
+        """
+        return [
+            field
+            for field in self.modelfields
+            if field.choices_list
+        ]
+
+    def get_required_fields(self):
+        """
+        Return a list of model fields defined as required.
+
+        Returns:
+            list: A list of Field objects.
+        """
+        return [
+            field
+            for field in self.modelfields
+            if field.required is True
+        ]
+
+    def get_required_fieldnames(self):
+        """
+        Return a list of names for model fields defined as required.
+
+        Returns:
+            list: A list of Field names (string).
+        """
+        return [
+            field.name
+            for field in self.modelfields
+            if field.required is True
+        ]
 
     def get_required_imports(self):
         """
