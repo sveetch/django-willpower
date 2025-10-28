@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.views.generic import ListView
-from django.views.generic import DetailView
-from django.views.generic.detail import SingleObjectMixin
+{% if not model_inventory.related_model %}from django.views.generic import DetailView{% else %}from django.views.generic.detail import SingleObjectMixin{% endif %}
 
 from ..models import {{ model_inventory.name }}{% if model_inventory.related_model %}, {{ model_inventory.related_model }}{% endif %}
 
@@ -18,8 +17,7 @@ class {{ model_inventory.view_basename.format('Index') }}(ListView):
         return self.model.objects.order_by({% if model_inventory.string_representation is string -%}"{{ model_inventory.string_representation }}"{% elif model_inventory.string_representation %}{% for item in model_inventory.string_representation %}"{{ item }}"{% if not loop.last %}, {% endif %}{% endfor %}{% else %}"id"{% endif %})
 
 
-{% if not model_inventory.related_model %}
-class {{ model_inventory.view_basename.format('Detail') }}(DetailView):
+{% if not model_inventory.related_model %}class {{ model_inventory.view_basename.format('Detail') }}(DetailView):
     """
     {{ model_inventory.name }} detail view.
     """
@@ -30,8 +28,7 @@ class {{ model_inventory.view_basename.format('Detail') }}(DetailView):
 
     def get_queryset(self):
         return self.model.objects.all()
-{% else %}
-class {{ model_inventory.view_basename.format('Detail') }}(SingleObjectMixin, ListView):
+{% else %}class {{ model_inventory.view_basename.format('Detail') }}(SingleObjectMixin, ListView):
     """
     {{ model_inventory.name }} detail view which list {{ model_inventory.related_model }} objects relations.
     """
@@ -52,4 +49,3 @@ class {{ model_inventory.view_basename.format('Detail') }}(SingleObjectMixin, Li
 
         return super().get(request, *args, **kwargs)
 {% endif %}
-

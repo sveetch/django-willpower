@@ -1,6 +1,5 @@
 {% import '_utils.jinja' as utils %}import factory
 
-from django.conf import settings
 from django.utils import timezone
 
 from ..models import {{ model_inventory.name }}{% for field in model_inventory.modelfields %}{% if field.choices_list %}

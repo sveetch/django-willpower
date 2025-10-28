@@ -16,8 +16,6 @@ class GlobalSearchView(SearchView):
 
         if self.request.method == "GET":
             # Add some arguments to notify that some fields are empty
-            # TODO: Usage of these args (from the crispy layout) should have a test
-            # coverage
             kwargs.update({
                 "empty_query": not self.request.GET.get("q"),
                 "empty_models": not self.request.GET.get("models"),
@@ -33,3 +31,4 @@ class GlobalSearchView(SearchView):
         if self.queryset is None:
             self.queryset = RelatedSearchQuerySet()
         return self.queryset
+

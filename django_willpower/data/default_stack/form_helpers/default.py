@@ -75,3 +75,4 @@ class DefaultFormHelper(FormHelper):
         value = value or self.DEFAULT_LAYOUT
         if value:
             self.layout = value
+

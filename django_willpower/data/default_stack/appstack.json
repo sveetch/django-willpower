@@ -322,7 +322,13 @@
                     "name": "Model tests",
                     "code": "models",
                     "template": "tests/models.py",
-                    "destination_pattern": "10{position}_{model}.py"
+                    "destination_pattern": "1000_models/10{position}_{model}.py"
+                },
+                {
+                    "name": "View tests",
+                    "code": "views",
+                    "template": "tests/views.py",
+                    "destination_pattern": "1100_views/11{position}_{model}.py"
                 },
                 {
                     "name": "Tests init",

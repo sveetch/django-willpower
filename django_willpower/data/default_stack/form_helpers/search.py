@@ -46,3 +46,4 @@ class AdvancedSearchFormHelper(DefaultFormHelper):
                 **models_extras
             ),
         )
+

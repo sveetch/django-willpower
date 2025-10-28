@@ -56,3 +56,4 @@ class GlobalSearchForm(ModelSearchForm):
             )
             {% endfor %}
         return sqs
+

@@ -7,3 +7,4 @@ class {{ model_inventory.admin_name }}Form(forms.ModelForm):
     class Meta:
         fields = "__all__"
         model = {{ model_inventory.name }}
+

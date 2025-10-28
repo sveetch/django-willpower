@@ -42,3 +42,4 @@ class ListGroupCheckboxes(Field):
                 "item_class": self.item_class,
             },
         )
+

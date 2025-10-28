@@ -19,3 +19,4 @@ def get_proper_elided_page_range(p, number, on_each_side=3, on_ends=2):
         on_each_side=on_each_side,
         on_ends=on_ends
     )
+
